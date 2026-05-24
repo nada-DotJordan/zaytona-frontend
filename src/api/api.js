@@ -1,12 +1,10 @@
-// src/api/api.js
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
 });
 
-// Auto-attach JWT token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -15,7 +13,7 @@ api.interceptors.request.use((config) => {
 
 export default api;
 
-// ── FARMS HOOK ─────────────────────────────────────────────
+//FARMS HOOK 
 export function useFarms() {
   const [farms, setFarms]     = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +29,7 @@ export function useFarms() {
   return { farms, setFarms, loading, refetch: fetchFarms };
 }
 
-// ── PRODUCTS HOOK ───────────────────────────────────────────
+//PRODUCTS HOOK 
 export function useProducts(farmId = null) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -48,7 +46,7 @@ export function useProducts(farmId = null) {
   return { products, setProducts, loading, refetch: fetchProducts };
 }
 
-// ── REVIEWS HOOK ────────────────────────────────────────────
+//REVIEWS HOOK 
 export function useReviews(farmId = null) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
