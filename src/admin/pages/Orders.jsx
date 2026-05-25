@@ -1,26 +1,26 @@
 // src/admin/pages/Orders.jsx
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { COLORS } from "../styles/colors";
 import { LanguageContext } from "../../languages/LanguageContext";
 import { GoldLine, MetricCard, StatusBadge, initials } from "../components/ui/Primitives";
-import api from "../../api/api"; // الـ axios instance المربوط بالباك إند
+import api from "../../api/api";
 
 const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
 
 export default function Orders() {
   const { lang } = useContext(LanguageContext);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [orders, setOrders]         = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [search, setSearch]         = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const res = await api.get("/orders"); 
+        const res = await api.get("/orders");
         setOrders(res.data);
       } catch (err) {
-        console.error("Failed to fetch live orders. Check if your user is marked as isAdmin in DB:", err);
+        console.error("Failed to fetch live orders:", err);
       } finally {
         setLoading(false);
       }
@@ -30,18 +30,17 @@ export default function Orders() {
 
   async function handleStatusChange(orderId, newStatus) {
     try {
-      // تحديد الـ stage المناسب بناءً على الحالة لتغذية الـ trackingHistory في الباك إند
       let stageDescription = "Order Updated";
       if (newStatus === "confirmed") stageDescription = "Order Confirmed & Preparing";
-      if (newStatus === "shipped") stageDescription = "Handed over to delivery agent";
+      if (newStatus === "shipped")   stageDescription = "Handed over to delivery agent";
       if (newStatus === "delivered") stageDescription = "Successfully delivered to customer";
       if (newStatus === "cancelled") stageDescription = "Cancelled by management";
 
-      const res = await api.put(`/orders/${orderId}/status`, { 
+      const res = await api.put(`/orders/${orderId}/status`, {
         status: newStatus,
-        stage: stageDescription 
+        stage:  stageDescription,
       });
-      
+
       setOrders((prev) =>
         prev.map((o) => ((o._id || o.id) === orderId ? { ...o, status: res.data.status } : o))
       );
@@ -51,21 +50,24 @@ export default function Orders() {
     }
   }
 
+  // ✅ اسم العميل الحقيقي من nameEn أو nameAr
+  function getCustomerName(o) {
+    if (!o.customerId) return "Guest User";
+    if (lang === "ar") return o.customerId.nameAr || o.customerId.nameEn || "Guest User";
+    return o.customerId.nameEn || o.customerId.nameAr || "Guest User";
+  }
+
   const filtered = orders.filter((o) => {
-    const orderId = o._id || o.id || "";
-    const customerName = o.customerId 
-  ? (lang === 'ar' ? o.customerId.nameAr : o.customerId.nameEn) 
-  : "Guest";
-    
+    const orderId      = (o._id || o.id || "").toLowerCase();
+    const customerName = getCustomerName(o).toLowerCase();
+    const query        = search.toLowerCase();
     return (
-      (customerName.toLowerCase().includes(search.toLowerCase()) ||
-        orderId.toLowerCase().includes(search.toLowerCase())) &&
+      (customerName.includes(query) || orderId.includes(query)) &&
       (!statusFilter || o.status === statusFilter)
     );
   });
 
-  // 4. حساب الإحصائيات من الأحرف الصغيرة المتوافقة مع قاعدة البيانات الحية
-  const pendingOrders = orders.filter((o) => o.status === "pending").length;
+  const pendingOrders   = orders.filter((o) => o.status === "pending").length;
   const confirmedOrders = orders.filter((o) => o.status === "confirmed").length;
   const totalOrdersToday = orders.filter((o) => {
     if (!o.createdAt) return false;
@@ -111,20 +113,24 @@ export default function Orders() {
           </div>
         </div>
         <div className="col-md-3">
-          <select className="za-input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ textTransform: "capitalize" }}>
+          <select
+            className="za-input"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            style={{ textTransform: "capitalize" }}
+          >
             <option value="">All statuses</option>
             {STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {loading && <p style={{ color: COLORS.textMuted, padding: 20 }}>Loading orders ledger from server...</p>}
+      {loading && (
+        <p style={{ color: COLORS.textMuted, padding: 20 }}>Loading orders ledger from server...</p>
+      )}
 
-      {/* ── ORDERS TABLE ── */}
       {!loading && (
         <div className="za-card">
           <div style={{ overflowX: "auto" }}>
@@ -142,26 +148,34 @@ export default function Orders() {
               </thead>
               <tbody>
                 {filtered.map((o) => {
-                  const id = o._id || o.id;
-                  const customerName = o.customerId?.name || o.customerName || "Guest User";
-                  const formattedDate = o.createdAt ? new Date(o.createdAt).toLocaleDateString() : "—";
-                  
+                  const id           = o._id || o.id;
+                  // ✅ الاسم الحقيقي
+                  const customerName = getCustomerName(o);
+                  const formattedDate = o.createdAt
+                    ? new Date(o.createdAt).toLocaleDateString()
+                    : "—";
+
+                  // ✅ اسم المنتج من nameEn أو nameAr
                   const productsSummary = o.items && o.items.length > 0
-                    ? o.items.map(item => {
-                        const name = item.productId?.name || "Zaytona Product";
+                    ? o.items.map((item) => {
+                        const name = item.productId?.nameEn
+                          || item.productId?.nameAr
+                          || item.productId?.name
+                          || "Zaytona Product";
                         return `${name} (x${item.qty})`;
                       }).join(", ")
                     : "No items";
 
-                  let calculatedTotal = 0;
-                  if (o.items && o.items.length > 0) {
-                    calculatedTotal = o.items.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 0)), 0);
-                  }
-                  const totalAmount = calculatedTotal > 0 ? `${calculatedTotal.toFixed(2)} JOD` : "—";
+                  const calculatedTotal = o.items
+                    ? o.items.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 0)), 0)
+                    : 0;
+                  const totalAmount = calculatedTotal > 0
+                    ? `${calculatedTotal.toFixed(2)} JOD`
+                    : "—";
 
                   return (
                     <tr key={id}>
-                      <td className="za-order-id" style={{ fontSize: "11px", fontFamily: "monospace" }}>
+                      <td style={{ fontSize: "11px", fontFamily: "monospace" }}>
                         {id ? id.substring(id.length - 8).toUpperCase() : "—"}
                       </td>
                       <td>
@@ -175,20 +189,16 @@ export default function Orders() {
                       <td style={{ color: COLORS.textMuted, fontSize: 12 }}>{productsSummary}</td>
                       <td style={{ fontWeight: 600, color: COLORS.textDark }}>{totalAmount}</td>
                       <td style={{ color: COLORS.textMuted, fontSize: 12 }}>{formattedDate}</td>
+                      <td><StatusBadge status={o.status || "pending"} /></td>
                       <td>
-                        <StatusBadge status={o.status || "pending"} />
-                      </td>
-                      <td>
-                        <select 
-                          className="za-input p-1" 
+                        <select
+                          className="za-input p-1"
                           style={{ fontSize: "11px", height: "auto", minWidth: "110px", textTransform: "capitalize" }}
                           value={o.status || "pending"}
                           onChange={(e) => handleStatusChange(id, e.target.value)}
                         >
-                          {STATUSES.map(st => (
-                            <option key={st} value={st}>
-                              {st}
-                            </option>
+                          {STATUSES.map((st) => (
+                            <option key={st} value={st}>{st}</option>
                           ))}
                         </select>
                       </td>
