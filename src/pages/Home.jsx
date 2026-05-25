@@ -7,316 +7,127 @@ import FeedbackSection from "../components/FeedbackSection";
 import { useAuth } from "../context/AuthContext";
 
 import Baraka from "../assets/Baraka.png";
-import GVF from "../assets/GVF.png";
-import tal from "../assets/tal.png";
-import HOF from "../assets/hof.png";
-import jabal from "../assets/jabal.jpg";
-import b from "../assets/b.jpg";
-import rawda from "../assets/rawda.jpg";
-import p from "../assets/p.jpg";
+import GVF    from "../assets/GVF.png";
+import tal    from "../assets/tal.png";
+import HOF    from "../assets/hof.png";
+import jabal  from "../assets/jabal.jpg";
+import b      from "../assets/b.jpg";
+import rawda  from "../assets/rawda.jpg";
+import p      from "../assets/p.jpg";
 import HERO_IMAGE from "../assets/heroo.jpg";
 
 const IMG_MAP = {
-  "Al-Baraka Farm": Baraka,
-  "Green Valley Farm": GVF,
-  "Tal Al-Zeitoun Farm": tal,
-  "Haddad Organic Farm": HOF,
-  "Jabal Al-Nar Farm": jabal,
-  "Beit Al-Zeitoun Farm": b,
-  "Al-Rawda Farm": rawda,
+  "Al-Baraka Farm":        Baraka,
+  "Green Valley Farm":     GVF,
+  "Tal Al-Zeitoun Farm":   tal,
+  "Haddad Organic Farm":   HOF,
+  "Jabal Al-Nar Farm":     jabal,
+  "Beit Al-Zeitoun Farm":  b,
+  "Al-Rawda Farm":         rawda,
   "Safouri Heritage Farm": p,
 };
 
 const TEXT = {
   en: {
-    heroLabel: "FROM FARM TO YOU",
+    heroLabel:      "FROM FARM TO YOU",
     heroTitleLine1: "Real Olive Oil.",
     heroTitleLine2: "Nothing Hidden.",
-    heroSubtitle:
-      "No blending. No guessing. Full traceability from trusted farms — straight to your door.",
-    heroButton: "Sign Up",
-    howTitle: "How It Works",
-    step1: { label: "From Our Farms", desc: "Carefully harvested olives from trusted farmers." },
+    heroSubtitle:   "No blending. No guessing. Full traceability from trusted farms — straight to your door.",
+    heroButton:     "Sign Up",
+    howTitle:       "How It Works",
+    step1: { label: "From Our Farms",      desc: "Carefully harvested olives from trusted farmers." },
     step2: { label: "Carefully Processed", desc: "Cold-pressed and quality-checked with care." },
-    step3: { label: "Packaged with Care", desc: "Sealed for freshness and labeled with a unique code." },
-    step4: { label: "To Your Table", desc: "Track every step until it reaches you." },
-    productsTitle: "Our Partner Farms",
+    step3: { label: "Packaged with Care",  desc: "Sealed for freshness and labeled with a unique code." },
+    step4: { label: "To Your Table",       desc: "Track every step until it reaches you." },
+    productsTitle:    "Our Partner Farms",
     productsSubtitle: "Our trusted farms — browse their oils, sizes, and pricing.",
-    viewAll: "View All",
-    viewMore: "View More",
-    viewProduct: "View Products",
-    sizesLabel: "Available sizes:",
-    priceRangeLabel: "Price range:",
-    loading: "Loading products...",
+    viewAll:          "View All",
+    viewMore:         "View More",
+    viewProduct:      "View Products",
+    sizesLabel:       "Available sizes:",
+    priceRangeLabel:  "Price range:",
+    loading:          "Loading products...",
   },
   ar: {
-    heroLabel: "من المزرعة إلى مائدتك",
+    heroLabel:      "من المزرعة إلى مائدتك",
     heroTitleLine1: "زيت زيتون حقيقي.",
     heroTitleLine2: "لا شيء مخفي.",
-    heroSubtitle: "لا مزج. لا تخمين. تتبّع كامل من مزارع موثوقة — مباشرةً إلى بابك.",
-    heroButton: "إنشاء حساب",
-    howTitle: "كيف يعمل النظام",
-    step1: { label: "من مزارعنا", desc: "زيتون محصود بعناية من مزارعين موثوقين." },
+    heroSubtitle:   "لا مزج. لا تخمين. تتبّع كامل من مزارع موثوقة — مباشرةً إلى بابك.",
+    heroButton:     "إنشاء حساب",
+    howTitle:       "كيف يعمل النظام",
+    step1: { label: "من مزارعنا",   desc: "زيتون محصود بعناية من مزارعين موثوقين." },
     step2: { label: "معالجة دقيقة", desc: "عصر بارد وفحص دقيق للجودة." },
-    step3: { label: "تعبئة آمنة", desc: "مختوم للطازجية ومُعلَّم برمز فريد." },
-    step4: { label: "إلى مائدتك", desc: "تتبّع كل خطوة حتى تصلك." },
-    productsTitle: "مزارعنا الشريكة",
+    step3: { label: "تعبئة آمنة",   desc: "مختوم للطازجية ومُعلَّم برمز فريد." },
+    step4: { label: "إلى مائدتك",   desc: "تتبّع كل خطوة حتى تصلك." },
+    productsTitle:    "مزارعنا الشريكة",
     productsSubtitle: "كل بطاقة تمثّل مزرعة موثوقة — تصفّح زيوتها وأحجامها وأسعارها.",
-    viewAll: "عرض الكل",
-    viewMore: "عرض المزيد",
-    viewProduct: "عرض المنتجات",
-    sizesLabel: "الأحجام المتاحة:",
-    priceRangeLabel: "نطاق السعر:",
-    loading: "جارٍ تحميل المنتجات...",
+    viewAll:          "عرض الكل",
+    viewMore:         "عرض المزيد",
+    viewProduct:      "عرض المنتجات",
+    sizesLabel:       "الأحجام المتاحة:",
+    priceRangeLabel:  "نطاق السعر:",
+    loading:          "جارٍ تحميل المنتجات...",
   },
 };
 
-const C = {
-  oliveDark:  "#546B41",
+const COLORS = {
+  oliveDark:  "#2c3d1f",
   oliveMid:   "#3d5a27",
-  oliveLight: "#99AD7A",
-  cream:      "#DCCCAC",
-  warmWhite:  "#FFF8EC",
-  gold:       "#b89a4e",
-  border:     "#ddd3b8",
+  oliveLight: "#6b8f47",
+  cream:      "#f5f0e8",
+  warmWhite:  "#faf8f3",
+  gold:       "#c8a84b",
+  border:     "#e2d9c5",
   textDark:   "#1c2910",
   textMuted:  "#7a7a6e",
 };
 
-const styles = {
-  /* Hero */
-  hero: {
-    position: "relative",
-    minHeight: "88vh",
-    display: "flex",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  heroBg: {
-    position: "absolute", inset: 0,
-    backgroundSize: "cover", backgroundPosition: "center",
-    filter: "brightness(0.45)",
-    zIndex: 0,
-  },
-  heroOverlay: {
-    position: "absolute", inset: 0,
-    background: "linear-gradient(135deg, rgba(44,61,31,0.55) 0%, rgba(20,30,10,0.3) 100%)",
-    zIndex: 1,
-  },
-  heroContent: { position: "relative", zIndex: 2 },
-
-  heroLabel: {
-    letterSpacing: "0.28em",
-    fontSize: 11,
-    fontWeight: 700,
-    color: C.gold,
-    textTransform: "uppercase",
-    marginBottom: 16,
-  },
-  heroH1: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(2.6rem, 6vw, 4.4rem)",
-    fontWeight: 700,
-    lineHeight: 1.12,
-    color: "#fff",
-    marginBottom: 20,
-  },
-  heroAccent: { color: C.gold },
-  heroSub: {
-    fontSize: 16,
-    color: "rgba(255,255,255,0.72)",
-    maxWidth: 480,
-    lineHeight: 1.65,
-    marginBottom: 34,
-  },
-  heroCta: {
-    display: "inline-flex", alignItems: "center", gap: 10,
-    background: C.oliveDark,
-    border: `1.5px solid ${C.gold}`,
-    color: "#fff",
-    padding: "13px 30px",
-    borderRadius: 4,
-    fontSize: 14,
-    fontWeight: 600,
-    letterSpacing: "0.06em",
-    cursor: "pointer",
-    transition: "background .2s",
-    textDecoration: "none",
-  },
-
-  divider: {
-    width: 44, height: 2,
-    background: C.gold,
-    margin: "0 auto 28px",
-    borderRadius: 2,
-  },
-
-  how: {
-    padding: "88px 0",
-    background: C.warmWhite,
-    borderTop: `1px solid ${C.border}`,
-    borderBottom: `1px solid ${C.border}`,
-  },
-  howTitle: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)",
-    fontWeight: 700,
-    color: C.oliveDark,
-    marginBottom: 8,
-  },
-  howSub: { fontSize: 14, color: C.textMuted, marginBottom: 52 },
-
-  stepCard: {
-    background: "#fff",
-    border: `1px solid ${C.border}`,
-    borderRadius: 10,
-    padding: "32px 24px 28px",
-    height: "100%",
-    transition: "box-shadow .2s, transform .2s",
-    cursor: "default",
-  },
-  stepIcon: {
-    width: 52, height: 52,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    borderRadius: "50%",
-    background: `${C.oliveDark}14`,
-    marginBottom: 18,
-  },
-  stepNum: {
-    fontSize: 10, fontWeight: 700, letterSpacing: "0.2em",
-    color: C.gold, textTransform: "uppercase", marginBottom: 8,
-  },
-  stepLabel: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: 18, fontWeight: 700, color: C.oliveDark, marginBottom: 8,
-  },
-  stepDesc: { fontSize: 13.5, color: C.textMuted, lineHeight: 1.6 },
-
-  /* Products */
-  products: { padding: "88px 0", background: "#fff" },
-  sectionTitle: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)",
-    fontWeight: 700,
-    color: C.oliveDark,
-    marginBottom: 8,
-  },
-  sectionSub: { fontSize: 14, color: C.textMuted, marginBottom: 48 },
-
-  farmCard: {
-    background: C.warmWhite,
-    border: `1px solid ${C.border}`,
-    borderRadius: 10,
-    overflow: "hidden",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    transition: "box-shadow .25s, transform .25s",
-    cursor: "pointer",
-  },
-  farmImgWrap: { position: "relative", paddingTop: "62%", overflow: "hidden" },
-  farmImg: {
-    position: "absolute", inset: 0,
-    width: "100%", height: "100%",
-    objectFit: "cover",
-    transition: "transform .4s",
-  },
-  farmBadge: {
-    position: "absolute", top: 10, right: 10,
-    background: C.oliveDark,
-    color: C.gold,
-    fontSize: 9, fontWeight: 700, letterSpacing: "0.18em",
-    padding: "4px 9px", borderRadius: 3, textTransform: "uppercase",
-  },
-  farmBody: { padding: "18px 18px 20px", flex: 1, display: "flex", flexDirection: "column" },
-  farmName: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: 17, fontWeight: 700, color: C.oliveDark, marginBottom: 6,
-  },
-  farmSizes: { fontSize: 12, color: C.textMuted, marginBottom: 14, flex: 1 },
-  farmBtn: {
-    display: "inline-flex", alignItems: "center", gap: 6,
-    background: "transparent",
-    border: `1.5px solid ${C.oliveDark}`,
-    color: C.oliveDark,
-    padding: "7px 16px",
-    borderRadius: 4,
-    fontSize: 12, fontWeight: 600,
-    cursor: "pointer",
-    transition: "background .2s, color .2s",
-    alignSelf: "flex-start",
-  },
-
-  viewMoreBtn: {
-    display: "inline-flex", alignItems: "center", gap: 8,
-    marginTop: 40,
-    background: C.oliveDark,
-    border: `1.5px solid ${C.oliveDark}`,
-    color: "#fff",
-    padding: "12px 28px",
-    borderRadius: 4,
-    fontSize: 13, fontWeight: 600, letterSpacing: "0.05em",
-    cursor: "pointer",
-    transition: "background .2s",
-  },
-};
-
-if (!document.getElementById("zay-gfont")) {
-  const l = document.createElement("link");
-  l.id = "zay-gfont";
-  l.rel = "stylesheet";
-  l.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap";
-  document.head.appendChild(l);
-}
-
 export default function Home() {
-  const { lang } = useContext(LanguageContext);
-  const navigate = useNavigate();
-  const t = TEXT[lang];
+  const { lang }            = useContext(LanguageContext);
+  const navigate            = useNavigate();
+  const t                   = TEXT[lang];
   const { products, loading } = useProducts();
   const { isAuthenticated } = useAuth();
 
-  const isRtl = lang === "ar";
-  const steps = [t.step1, t.step2, t.step3, t.step4];
-  const icons = [FaLeaf, FaFlask, FaBox, FaTruck];
+  const isRtl           = lang === "ar";
+  const steps           = [t.step1, t.step2, t.step3, t.step4];
+  const icons           = [FaLeaf, FaFlask, FaBox, FaTruck];
   const displayProducts = products.slice(0, 4);
-
-  function getSizes(prod) {
-    if (prod.sizeL) return prod.sizeL;
-    return prod.versions?.map((v) => v.label).filter(Boolean).join(", ") || "—";
-  }
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"}>
 
-      <section style={styles.hero}>
-        <div
-          style={{ ...styles.heroBg, backgroundImage: `url(${HERO_IMAGE})` }}
-        />
-        <div style={styles.heroOverlay} />
+      {/* ── HERO ── */}
+      <section style={{
+        background: `linear-gradient(rgba(30,50,20,0.75), rgba(30,50,20,0.75)), url(${HERO_IMAGE}) center/cover no-repeat`,
+        minHeight: "88vh",
+        display: "flex",
+        alignItems: "center",
+      }}>
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 mb-5 mb-lg-0">
 
-        <div className="container" style={styles.heroContent}>
-          <div className="row">
-            <div className="col-lg-7 col-xl-6">
+              <p style={{ fontSize: "0.72rem", letterSpacing: "2.5px", textTransform: "uppercase", color: COLORS.gold, fontWeight: 600, marginBottom: 10 }}>
+                {t.heroLabel}
+              </p>
 
-              <p style={styles.heroLabel}>{t.heroLabel}</p>
-
-              <h1 style={styles.heroH1}>
-                {t.heroTitleLine1}<br />
-                <span style={styles.heroAccent}>{t.heroTitleLine2}</span>
+              <h1 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(2rem, 5vw, 3.4rem)", color: "#fff", lineHeight: 1.2, marginBottom: "1.25rem" }}>
+                {t.heroTitleLine1}
+                <br />
+                <em style={{ fontStyle: "italic", color: COLORS.gold }}>{t.heroTitleLine2}</em>
               </h1>
 
-              <p style={styles.heroSub}>{t.heroSubtitle}</p>
+              <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1rem", lineHeight: 1.7, marginBottom: "2rem" }}>
+                {t.heroSubtitle}
+              </p>
 
               {!isAuthenticated && (
                 <button
-                  style={styles.heroCta}
                   onClick={() => navigate("/register")}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = C.oliveLight)}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = C.oliveDark)}
+                  style={{ background: COLORS.oliveLight, border: "none", color: "#fff", padding: "13px 28px", borderRadius: 6, fontSize: "0.9rem", fontWeight: 500, cursor: "pointer" }}
                 >
                   {t.heroButton}
-                  <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
                 </button>
               )}
 
@@ -325,101 +136,119 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={styles.how}>
-        <div className="container text-center">
-          <h2 style={styles.howTitle}>{t.howTitle}</h2>
-          <div style={styles.divider} />
-          <p style={styles.howSub}></p>
-
-          <div className="row g-4 mt-1 justify-content-center">
+      {/* ── HOW IT WORKS ── */}
+      <section style={{ background: COLORS.warmWhite, padding: "100px 0" }}>
+        <div className="container">
+          <h2 className="text-center mb-5" style={{ fontFamily: "Georgia, serif", fontSize: "2.2rem", color: COLORS.textDark }}>
+            {t.howTitle}
+          </h2>
+          <div className="row justify-content-center align-items-start">
             {steps.map((step, i) => {
               const Icon = icons[i];
               return (
-                <div key={i} className="col-sm-6 col-md-3">
-                  <div
-                    style={styles.stepCard}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = "0 8px 28px rgba(84,107,65,.13)";
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "none";
-                    }}
-                  >
-                    <div style={styles.stepIcon}>
-                      <Icon size={22} color={C.oliveDark} />
+                <React.Fragment key={i}>
+                  <div className="col-6 col-md-2 text-center mb-4">
+                    <div style={{
+                      width: 90, height: 90, borderRadius: "50%",
+                      border: `2px solid ${COLORS.border}`,
+                      background: COLORS.cream,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 18px",
+                    }}>
+                      <Icon size={36} color={COLORS.oliveMid} />
                     </div>
-                    <p style={styles.stepNum}>0{i + 1}</p>
-                    <h5 style={styles.stepLabel}>{step.label}</h5>
-                    <p style={styles.stepDesc}>{step.desc}</p>
+                    <h6 style={{ fontWeight: 700, fontSize: "0.95rem", marginBottom: 8, color: COLORS.textDark }}>{step.label}</h6>
+                    <p style={{ fontSize: "0.82rem", color: COLORS.textMuted, lineHeight: 1.65, margin: 0 }}>{step.desc}</p>
                   </div>
-                </div>
+
+                  {i < steps.length - 1 && (
+                    <div className="col-md-1 d-none d-md-flex align-items-start justify-content-center" style={{ paddingTop: 52 }}>
+                      <span style={{ color: COLORS.border, fontSize: "1.6rem" }}>
+                        {isRtl ? "←" : "→"}
+                      </span>
+                    </div>
+                  )}
+                </React.Fragment>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section style={styles.products}>
+      {/* ── PRODUCTS ── */}
+      <section style={{ background: "#fff", padding: "80px 0" }} id="products">
         <div className="container">
 
-          <h2 style={styles.sectionTitle}>{t.productsTitle}</h2>
-          <div style={{ ...styles.divider, margin: "0 0 14px" }} />
-          <p style={styles.sectionSub}>{t.productsSubtitle}</p>
+          <div className="d-flex justify-content-between align-items-end mb-2">
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: "2rem", color: COLORS.textDark, margin: 0 }}>
+              {t.productsTitle}
+            </h2>
+            <button
+              onClick={() => navigate("/Products")}
+              style={{ background: "none", border: "none", color: COLORS.oliveMid, fontSize: "0.85rem", fontWeight: 500, borderBottom: `1px solid ${COLORS.oliveMid}`, cursor: "pointer", padding: 0 }}
+            >
+              {t.viewAll}
+            </button>
+          </div>
+
+          <p style={{ fontSize: "0.83rem", color: COLORS.textMuted, marginBottom: "1.8rem" }}>
+            {t.productsSubtitle}
+          </p>
 
           {loading && (
-            <p style={{ color: C.textMuted }}>{t.loading}</p>
+            <p style={{ textAlign: "center", color: COLORS.textMuted, padding: "40px 0" }}>{t.loading}</p>
           )}
 
-          <div className="row g-4">
+          <div className="row g-3">
             {displayProducts.map((prod) => {
               const farmNameEn = prod.farmId?.nameEn || "";
+              const farmName   = lang === "en" ? prod.farmId?.nameEn : prod.farmId?.nameAr;
+              const prodName   = lang === "en" ? prod.nameEn : prod.nameAr;
               const img        = IMG_MAP[farmNameEn] || Baraka;
-              const displayName = lang === "en" ? (prod.nameEn || farmNameEn) : (prod.nameAr || farmNameEn);
+              const minPrice   = prod.versions?.[0]?.price ?? 0;
+              const maxPrice   = prod.versions?.[prod.versions.length - 1]?.price ?? 0;
 
               return (
-                <div key={prod._id} className="col-sm-6 col-md-3">
-                  <div
-                    style={styles.farmCard}
-                    onClick={() => navigate("/Products")}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = "0 12px 36px rgba(84,107,65,.14)";
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                      e.currentTarget.querySelector("img").style.transform = "scale(1.06)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "none";
-                      e.currentTarget.querySelector("img").style.transform = "scale(1)";
-                    }}
-                  >
-                    <div style={styles.farmImgWrap}>
-                      <img src={img} alt={displayName} style={styles.farmImg} />
-                      <span style={styles.farmBadge}>Verified Farm</span>
-                    </div>
+                <div className="col-6 col-md-3" key={prod._id}>
+                  <div style={{
+                    background: "#fff", borderRadius: 10, overflow: "hidden",
+                    border: `1px solid ${COLORS.border}`,
+                    height: "100%", display: "flex", flexDirection: "column",
+                  }}>
+                    <img src={img} alt={prodName} style={{ width: "100%", height: 180, objectFit: "cover" }} />
+                    <div style={{ padding: "1rem", display: "flex", flexDirection: "column", flexGrow: 1 }}>
 
-                    {/* Body */}
-                    <div style={styles.farmBody}>
-                      <h6 style={styles.farmName}>{displayName}</h6>
-                      <p style={styles.farmSizes}>
-                        <span style={{ color: C.gold, fontWeight: 600 }}>{t.sizesLabel} </span>
-                        {getSizes(prod)}
+                      <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: COLORS.oliveLight, marginBottom: 4 }}>
+                        🌿 {farmName}
                       </p>
+                      <h5 style={{ fontWeight: 600, fontSize: "0.92rem", marginBottom: 10, color: COLORS.textDark }}>
+                        {prodName}
+                      </h5>
+                      <hr style={{ borderColor: COLORS.border, margin: "0 0 10px" }} />
+
+                      <p style={{ fontSize: "0.72rem", color: COLORS.textMuted, marginBottom: 4, fontWeight: 600 }}>{t.sizesLabel}</p>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 10 }}>
+                        <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: 20, border: `1px solid ${COLORS.border}`, color: COLORS.oliveMid, background: COLORS.cream }}>
+                          {prod.sizeL}
+                        </span>
+                      </div>
+
+                      <p style={{ fontSize: "0.72rem", color: COLORS.textMuted, marginBottom: 2, fontWeight: 600 }}>{t.priceRangeLabel}</p>
+                      <p style={{ fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 6 }}>
+                        {minPrice} – {maxPrice} JD
+                      </p>
+
+                      <p style={{ fontWeight: 700, fontSize: "1.05rem", color: COLORS.oliveDark, marginBottom: "0.9rem", marginTop: "auto" }}>
+                        {lang === "en" ? `From ${minPrice} JD` : `من ${minPrice} دينار`}
+                      </p>
+
                       <button
-                        style={styles.farmBtn}
-                        onClick={(e) => { e.stopPropagation(); navigate("/Products"); }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = C.oliveDark;
-                          e.currentTarget.style.color = "#fff";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "transparent";
-                          e.currentTarget.style.color = C.oliveDark;
-                        }}
+                        onClick={() => navigate("/Products")}
+                        style={{ width: "100%", background: COLORS.oliveDark, color: "#fff", border: "none", padding: "9px", borderRadius: 5, fontSize: "0.82rem", cursor: "pointer" }}
                       >
-                        {t.viewProduct} →
+                        {t.viewProduct}
                       </button>
+
                     </div>
                   </div>
                 </div>
@@ -427,21 +256,21 @@ export default function Home() {
             })}
           </div>
 
-          <div className="text-center">
+          <div className="text-center mt-4">
             <button
-              style={styles.viewMoreBtn}
               onClick={() => navigate("/Products")}
-              onMouseEnter={(e) => (e.currentTarget.style.background = C.oliveLight)}
-              onMouseLeave={(e) => (e.currentTarget.style.background = C.oliveDark)}
+              style={{ background: "transparent", border: `1.5px solid ${COLORS.oliveDark}`, color: COLORS.oliveDark, padding: "11px 32px", borderRadius: 6, fontSize: "0.88rem", cursor: "pointer" }}
             >
-              {t.viewMore} →
+              {t.viewMore}
             </button>
           </div>
 
         </div>
       </section>
 
-      <FeedbackSection />
+      <div style={{ background: COLORS.warmWhite }}>
+        <FeedbackSection />
+      </div>
 
     </div>
   );
