@@ -4,7 +4,7 @@ import { LanguageContext } from "../languages/LanguageContext";
 import { FaLeaf, FaTruck, FaBox, FaFlask } from "react-icons/fa";
 import { useProducts } from "../api/api";
 import FeedbackSection from "../components/FeedbackSection";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 import Baraka    from "../assets/Baraka.png";
 import GVF       from "../assets/GVF.png";
