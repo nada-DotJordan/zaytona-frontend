@@ -1,19 +1,17 @@
-// src/admin/pages/AdminReviews.jsx
 import { useState, useEffect } from "react";
 import { COLORS } from "../styles/colors";
 import { GoldLine, MetricCard } from "../components/ui/Primitives";
-import api from "../../api/api"; // الـ axios instance تبعك
+import api from "../../api/api"; 
 
 export default function AdminReviews() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  // 1. جلب التقييمات الحقيقية من السيرفر فور تحميل الصفحة
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const res = await api.get("/reviews"); // نفس الـ route اللي بيجيب كل التقييمات
+        const res = await api.get("/reviews"); 
         setReviews(res.data);
       } catch (err) {
         console.error("Failed to fetch reviews:", err);
@@ -24,7 +22,6 @@ export default function AdminReviews() {
     fetchReviews();
   }, []);
 
-  // 2. دالة الحذف الخاصة بالمسؤول (Admin Delete)
   async function handleDelete(id) {
     if (!window.confirm("Admin: Are you sure you want to permanently delete this review?")) return;
     try {
@@ -36,7 +33,6 @@ export default function AdminReviews() {
     }
   }
 
-  // 3. فلترة التقييمات بناءً على البحث (باسم المستخدم أو اسم المزرعة أو نص التعليق)
   const filtered = reviews.filter((r) => {
     const username = (r.name || "").toLowerCase();
     const comment = (r.comment || "").toLowerCase();
@@ -46,7 +42,6 @@ export default function AdminReviews() {
     return username.includes(query) || comment.includes(query) || farmName.includes(query);
   });
 
-  // حساب الحسبية للإحصائيات السريعة فوق
   const totalReviews = reviews.length;
   const avgRating = totalReviews 
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1) 
@@ -56,7 +51,6 @@ export default function AdminReviews() {
     <div>
       <GoldLine />
 
-      {/* ── KPI METRICS ── */}
       <div className="row g-3 mb-3">
         <div className="col-md-6">
           <MetricCard icon="bi-chat-left-text-fill" label="Total Reviews" value={totalReviews} />
@@ -71,7 +65,6 @@ export default function AdminReviews() {
         </div>
       </div>
 
-      {/* ── SEARCH BAR ── */}
       <div className="mb-3">
         <div className="za-search-wrap">
           <i className="bi bi-search" />
@@ -84,10 +77,8 @@ export default function AdminReviews() {
         </div>
       </div>
 
-      {/* ── LOADING STATE ── */}
       {loading && <p style={{ color: COLORS.textMuted, padding: 20 }}>Loading reviews...</p>}
 
-      {/* ── REVIEWS LIST/TABLE ── */}
       {!loading && (
         <div className="za-card">
           <div style={{ overflowX: "auto" }}>

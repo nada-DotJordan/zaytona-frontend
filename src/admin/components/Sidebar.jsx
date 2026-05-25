@@ -2,7 +2,6 @@ import React from "react";
 import { navItems } from "../data/mockData";
 
 export default function Sidebar({ active, onNavigate }) {
-  // Fallback conditional logic arrays prevents standard tracking object undefined runtime errors
   const safeNavItems = navItems || [];
 
   return (
@@ -14,7 +13,6 @@ export default function Sidebar({ active, onNavigate }) {
         <div className="za-brand-sub">Admin Panel</div>
       </div>
 
-      {/* Nav groups */}
       {safeNavItems.map((group) => {
         if (!group || !group.items) return null;
         return (

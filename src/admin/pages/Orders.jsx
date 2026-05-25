@@ -1,4 +1,3 @@
-// src/admin/pages/Orders.jsx
 import { useState, useEffect, useContext } from "react";
 import { COLORS } from "../styles/colors";
 import { LanguageContext } from "../../languages/LanguageContext";
@@ -50,7 +49,6 @@ export default function Orders() {
     }
   }
 
-  // ✅ اسم العميل الحقيقي من nameEn أو nameAr
   function getCustomerName(o) {
     if (!o.customerId) return "Guest User";
     if (lang === "ar") return o.customerId.nameAr || o.customerId.nameEn || "Guest User";
@@ -149,13 +147,11 @@ export default function Orders() {
               <tbody>
                 {filtered.map((o) => {
                   const id           = o._id || o.id;
-                  // ✅ الاسم الحقيقي
                   const customerName = getCustomerName(o);
                   const formattedDate = o.createdAt
                     ? new Date(o.createdAt).toLocaleDateString()
                     : "—";
 
-                  // ✅ اسم المنتج من nameEn أو nameAr
                   const productsSummary = o.items && o.items.length > 0
                     ? o.items.map((item) => {
                         const name = item.productId?.nameEn

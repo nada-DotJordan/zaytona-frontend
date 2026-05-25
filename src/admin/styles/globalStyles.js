@@ -1,12 +1,7 @@
-// ─────────────────────────────────────────────
-// 💉  ZAYTONA ADMIN — GLOBAL STYLES INJECTOR
-// Called once in main.jsx / index.js
-// ─────────────────────────────────────────────
 
 import { COLORS } from "./colors";
 
 export function injectGlobalStyles() {
-  // ── Fonts ──
   const appendLink = (href) => {
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement("link");
@@ -25,7 +20,6 @@ export function injectGlobalStyles() {
     "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
   );
 
-  // ── Global CSS ──
   if (document.getElementById("za-global-styles")) return; // already injected
   const style = document.createElement("style");
   style.id = "za-global-styles";

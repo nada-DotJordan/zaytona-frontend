@@ -1,6 +1,3 @@
-//ZAYTONA ADMIN — COLOR PALETTE
-
-
 export const COLORS = {
   oliveDark:  "#2c3d1f",
   oliveMid:   "#3d5a27",

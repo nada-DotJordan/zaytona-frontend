@@ -14,7 +14,6 @@ import b     from "../assets/b.jpg";
 import rawda from "../assets/rawda.jpg";
 import p     from "../assets/p.jpg";
 
-// ✅ نفس IMG_MAP تبع صفحة المنتجات
 const IMG_MAP = {
   "Al-Baraka Farm":        Baraka,
   "Green Valley Farm":     GVF,
@@ -112,13 +111,11 @@ function StatusPill({ status }) {
   );
 }
 
-// ✅ TrackingSection يجيب طلبات المستخدم من /orders/my
 function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   const [orders, setOrders]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery]     = useState("");
 
-  // جيب طلبات المستخدم
   function fetchOrders() {
     setLoading(true);
     api.get("/orders/my")
@@ -126,7 +123,7 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
       .catch(() => setLoading(false));
   }
 
-  useEffect(() => { fetchOrders(); }, [highlightId]); // ✅ يعيد التحميل بعد كل طلب جديد
+  useEffect(() => { fetchOrders(); }, [highlightId]); 
 
   const filtered = query.trim()
     ? orders.filter(o => o._id.toLowerCase().includes(query.toLowerCase()))
@@ -144,7 +141,6 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
       </div>
 
       <div style={{ padding: 20 }}>
-        {/* Search */}
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
           <input
             value={query}
@@ -157,7 +153,6 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
           </button>
         </div>
 
-        {/* Table */}
         <div style={{ fontSize: "0.72rem", fontWeight: 700, color: COLORS.textMuted, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 10 }}>
           {t.recentOrders}
         </div>
@@ -220,7 +215,6 @@ export default function Cart() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
 
-  // ✅ حفظ معلومات التوصيل في localStorage
   const [deliveryInfo, setDeliveryInfo] = useState(() => {
     try {
       const saved = localStorage.getItem(DELIVERY_KEY);
@@ -262,7 +256,6 @@ export default function Cart() {
       setOrderSuccess(true);
       setLastOrderId(newId);
 
-      // ✅ Scroll للـ tracking بعد 400ms
       setTimeout(() => {
         trackingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 400);
@@ -286,14 +279,12 @@ export default function Cart() {
 
       <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 20px 80px" }}>
 
-        {/* Success banner */}
         {orderSuccess && (
           <div style={{ background: "#def7ec", border: "1px solid #057a55", borderRadius: 10, padding: "14px 20px", marginBottom: 24, fontSize: "0.88rem", color: "#057a55", fontWeight: 600 }}>
             ✅ {t.orderSuccess}
           </div>
         )}
 
-        {/* Empty */}
         {items.length === 0 && !orderSuccess && (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ fontSize: "4rem", marginBottom: 16 }}>🫙</div>
@@ -304,14 +295,12 @@ export default function Cart() {
           </div>
         )}
 
-        {/* Cart + Summary */}
         {items.length > 0 && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 28, alignItems: "start" }}>
 
-            {/* LEFT: Items */}
             <div>
               {items.map(({ product, version, qty }) => {
-                const img  = getProductImg(product); // ✅ الصورة من IMG_MAP
+                const img  = getProductImg(product); // 
                 const name = product.nameEn || product.name || "";
                 const farm = product.farmId?.nameEn || product.farm || "";
                 const size = product.sizeL || product.size || "";
@@ -345,10 +334,8 @@ export default function Cart() {
               })}
             </div>
 
-            {/* RIGHT: Delivery + Summary */}
             <div style={{ position: "sticky", top: 20 }}>
 
-              {/* Delivery Info */}
               <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, marginBottom: 16 }}>
                 <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem", color: COLORS.oliveDark, marginBottom: 12, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span>📋 {t.shippingTitle}</span>
@@ -384,7 +371,6 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* Order Summary */}
               <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 22, marginBottom: 16 }}>
                 <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1rem", color: COLORS.oliveDark, marginBottom: 14, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
                   {t.orderSummary}
@@ -414,7 +400,6 @@ export default function Cart() {
           </div>
         )}
 
-        {/* Tracking Section */}
         <div style={{ marginTop: 48 }}>
           <TrackingSection t={t} isRTL={isRTL} trackingRef={trackingRef} highlightId={lastOrderId} />
         </div>

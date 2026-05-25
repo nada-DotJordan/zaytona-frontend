@@ -59,7 +59,6 @@ export default function Footer() {
           <div className="col-md-4">
             <h5 style={{ fontFamily: "Georgia, serif", color: "#fff", marginBottom: 10 }}>{t.aboutTitle}</h5>
             <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{t.aboutDesc}</p>
-            {/* ✅ Fixed: NavLink to /about */}
             <NavLink to="/about" style={footerLink}>{t.aboutLink}</NavLink>
           </div>
 
@@ -67,7 +66,6 @@ export default function Footer() {
           <div className="col-md-4">
             <h5 style={{ fontFamily: "Georgia, serif", color: "#fff", marginBottom: 10 }}>{t.farmsTitle}</h5>
             <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{t.farmsDesc}</p>
-            {/* ✅ Fixed: NavLink to /farms */}
             <NavLink to="/farms" style={footerLink}>{t.farmsLink}</NavLink>
           </div>
 
@@ -78,7 +76,6 @@ export default function Footer() {
               Email: {t.contactEmail}<br />
               Phone: {t.contactPhone}
             </p>
-            {/* ✅ Fixed: mailto link */}
             <a href={`mailto:${t.contactEmail}`} style={footerLink}>{t.contactLink}</a>
           </div>
 
@@ -89,7 +86,6 @@ export default function Footer() {
         <div className="d-flex justify-content-between flex-wrap gap-2">
           <span style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.45)" }}>{t.rights}</span>
           <div className="d-flex gap-3">
-            {/* ✅ Fixed: NavLinks instead of <a href="#"> */}
             <NavLink to="/privacy" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{t.privacy}</NavLink>
             <NavLink to="/terms"   style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{t.terms}</NavLink>
           </div>

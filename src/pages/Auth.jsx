@@ -46,7 +46,7 @@ const TEXT = {
     confirm:             "Confirm Password",
     namePlaceholder:     "Your full name",
     emailPlaceholder:    "you@example.com",
-    passwordPlaceholder: "Min. 6 characters",
+    passwordPlaceholder: "Min. 5 characters",
     confirmPlaceholder:  "Repeat your password",
 
     nameError:     "Full name is required.",
@@ -84,7 +84,7 @@ const TEXT = {
     confirm:             "تأكيد كلمة المرور",
     namePlaceholder:     "اسمك الكامل",
     emailPlaceholder:    "example@email.com",
-    passwordPlaceholder: "٦ أحرف على الأقل",
+    passwordPlaceholder: "5 أحرف على الأقل",
     confirmPlaceholder:  "أعد كلمة المرور",
 
     nameError:     "الاسم الكامل مطلوب.",
@@ -97,9 +97,7 @@ const TEXT = {
   },
 };
 
-// ─────────────────────────────────────────────
-// Field component
-// ─────────────────────────────────────────────
+
 function Field({ label, type, placeholder, value, onChange, onBlur, error, touched, showToggle, onToggle, isRtl }) {
   return (
     <div style={{ marginBottom: 16 }}>
@@ -149,9 +147,6 @@ function Field({ label, type, placeholder, value, onChange, onBlur, error, touch
   );
 }
 
-// ─────────────────────────────────────────────
-// ErrorBanner component
-// ─────────────────────────────────────────────
 function ErrorBanner({ message }) {
   if (!message) return null;
   return (
@@ -170,19 +165,15 @@ function ErrorBanner({ message }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Auth Page
-// ─────────────────────────────────────────────
 export default function Auth() {
   const { lang }      = useContext(LanguageContext);
   const navigate      = useNavigate();
-  const { saveUser }  = useAuth();          // ✅ inside the component
+  const { saveUser }  = useAuth();         
   const t             = TEXT[lang];
   const isRtl         = lang === "ar";
 
   const [mode, setMode] = useState("login");
 
-  // ── Login state ──
   const [login, setLogin]               = useState({ email: "", password: "" });
   const [showLP, setShowLP]             = useState(false);
   const [loginErr, setLoginErr]         = useState({});
@@ -190,7 +181,6 @@ export default function Auth() {
   const [loginServer, setLoginServer]   = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // ── Register state ──
   const [reg, setReg]               = useState({ name: "", email: "", password: "", confirm: "" });
   const [showRP, setShowRP]         = useState(false);
   const [showRC, setShowRC]         = useState(false);
@@ -209,7 +199,7 @@ export default function Auth() {
   function validateLogin(f = login) {
     const e = {};
     if (!f.email || !/\S+@\S+\.\S+/.test(f.email)) e.email    = t.emailError;
-    if (!f.password)                                 e.password = t.passwordError;  // ✅ no length check for login
+    if (!f.password)                                 e.password = t.passwordError;  
     return e;
   }
 
@@ -224,7 +214,6 @@ export default function Auth() {
     if (loginTouched[field]) setLoginErr(validateLogin(updated));
   }
 
-  // ── LOGIN SUBMIT ──
   async function handleLoginSubmit(e) {
     e.preventDefault();
     const errs = validateLogin();
@@ -251,7 +240,6 @@ export default function Auth() {
     }
   }
 
-  // ── Register validation ──
   function validateReg(f = reg) {
     const e = {};
     if (!f.name.trim())                             e.name     = t.nameError;
@@ -272,7 +260,6 @@ export default function Auth() {
     if (regTouched[field]) setRegErr(validateReg(updated));
   }
 
-  // ── REGISTER SUBMIT ──
   async function handleRegSubmit(e) {
     e.preventDefault();
     const errs = validateReg();
@@ -284,13 +271,13 @@ export default function Auth() {
       setRegLoading(true);
       setRegServer("");
 
-      const userData = await registerUser({   // ✅ capture return value
+      const userData = await registerUser({   
         nameEn:   reg.name,
         email:    reg.email,
         password: reg.password,
       });
 
-      saveUser(userData);                     // ✅ save to context
+      saveUser(userData);                   
       navigate("/");
 
     } catch (err) {
@@ -304,7 +291,6 @@ export default function Auth() {
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: COLORS.warmWhite }}>
 
-      {/* ── FORM PANEL ── */}
       <div style={{
         flex: 1,
         display: "flex",
@@ -316,12 +302,10 @@ export default function Auth() {
       }}>
         <div style={{ width: "100%", maxWidth: 420 }}>
 
-          {/* Logo */}
           <p style={{ fontSize: "0.65rem", letterSpacing: "3px", textTransform: "uppercase", color: COLORS.oliveLight, fontWeight: 700, marginBottom: 24 }}>
             🌿 ZAYTONA
           </p>
 
-          {/* Tab toggle */}
           <div style={{
             display: "flex",
             background: COLORS.cream,
@@ -356,7 +340,6 @@ export default function Auth() {
             })}
           </div>
 
-          {/* ── LOGIN FORM ── */}
           {mode === "login" && (
             <div>
               <p style={{ fontSize: "0.65rem", letterSpacing: "2.5px", textTransform: "uppercase", color: COLORS.oliveLight, fontWeight: 700, marginBottom: 10 }}>
@@ -419,7 +402,6 @@ export default function Auth() {
             </div>
           )}
 
-          {/* ── REGISTER FORM ── */}
           {mode === "register" && (
             <div>
               <p style={{ fontSize: "0.65rem", letterSpacing: "2.5px", textTransform: "uppercase", color: COLORS.oliveLight, fontWeight: 700, marginBottom: 10 }}>
@@ -510,7 +492,6 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* ── IMAGE PANEL ── */}
       <div
         className="d-none d-md-flex"
         style={{

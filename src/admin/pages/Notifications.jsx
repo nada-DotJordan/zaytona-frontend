@@ -1,4 +1,3 @@
-// src/admin/pages/Notifications.jsx
 import { useState, useEffect } from "react";
 import { COLORS } from "../styles/colors";
 import { GoldLine } from "../components/ui/Primitives";
@@ -26,7 +25,6 @@ export default function Notifications() {
   const [type,         setType]         = useState(TYPES[0]);
   const [message,      setMessage]      = useState("");
 
-  // ── جلب سجلات الإشعارات المرسلة (Admin logs) ──
   useEffect(() => {
     async function fetchNotifications() {
       try {
@@ -41,7 +39,6 @@ export default function Notifications() {
     fetchNotifications();
   }, []);
 
-  // ── إرسال إشعار جديد ──
   async function handleSend(e) {
     e.preventDefault();
 
@@ -64,7 +61,6 @@ export default function Notifications() {
         messageAr:     message.trim(),
       });
 
-      // أضيفي الإشعار الجديد فوق القائمة مباشرةً بدون reload
       setNotifications((prev) => [res.data, ...prev]);
       setMessage("");
       setTargetEmail("");
@@ -81,7 +77,6 @@ export default function Notifications() {
     <div>
       <GoldLine />
 
-      {/* ── SEND FORM ── */}
       <div className="za-card mb-3">
         <div className="za-card-header">
           <span className="za-card-title">
@@ -118,7 +113,6 @@ export default function Notifications() {
               </div>
             </div>
 
-            {/* حقل الإيميل يظهر فقط عند اختيار "Specific user" */}
             {recipient === "Specific user" && (
               <div className="mb-2">
                 <label className="za-label">Customer Email Address</label>
@@ -152,7 +146,6 @@ export default function Notifications() {
         </div>
       </div>
 
-      {/* ── NOTIFICATION LOGS LIST ── */}
       <div className="za-card">
         <div className="za-card-header">
           <span className="za-card-title">Recent notification logs</span>

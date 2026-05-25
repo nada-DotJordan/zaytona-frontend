@@ -1,4 +1,3 @@
-// src/pages/NotificationsPage.jsx
 import { useState, useEffect } from "react";
 import api from "../api/api";
 
@@ -15,9 +14,8 @@ const DEFAULT_TYPE = { icon: "bi-bell", color: "#5a5a5a", bg: "#f4f4f4", label: 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading]             = useState(true);
-  const [filter, setFilter]               = useState("all"); // all | unread
+  const [filter, setFilter]               = useState("all"); 
 
-  // ── جلب إشعارات الـ user من الباك إند ──
   useEffect(() => {
     async function fetchNotifications() {
       try {
@@ -32,7 +30,6 @@ export default function NotificationsPage() {
     fetchNotifications();
   }, []);
 
-  // ── تحديد إشعار كمقروء ──
   async function markAsRead(id) {
     try {
       await api.put(`/notifications/${id}/read`);
@@ -44,7 +41,6 @@ export default function NotificationsPage() {
     }
   }
 
-  // ── تحديد الكل كمقروء ──
   async function markAllAsRead() {
     const unread = notifications.filter((n) => !n.isRead);
     await Promise.all(unread.map((n) => api.put(`/notifications/${n._id}/read`)));
@@ -59,7 +55,6 @@ export default function NotificationsPage() {
 
   return (
     <div style={styles.page}>
-      {/* ── HEADER ── */}
       <div style={styles.header}>
         <div>
           <h2 style={styles.title}>
@@ -80,7 +75,6 @@ export default function NotificationsPage() {
         )}
       </div>
 
-      {/* ── FILTER TABS ── */}
       <div style={styles.tabs}>
         {["all", "unread"].map((tab) => (
           <button
@@ -93,7 +87,6 @@ export default function NotificationsPage() {
         ))}
       </div>
 
-      {/* ── LOADING ── */}
       {loading && (
         <div style={styles.emptyState}>
           <div className="spinner-border spinner-border-sm" style={{ color: "#8a6c2a" }} />
@@ -101,7 +94,6 @@ export default function NotificationsPage() {
         </div>
       )}
 
-      {/* ── EMPTY STATE ── */}
       {!loading && displayed.length === 0 && (
         <div style={styles.emptyState}>
           <i className="bi bi-bell-slash" style={{ fontSize: 40, color: "#c8b99a" }} />
@@ -111,7 +103,6 @@ export default function NotificationsPage() {
         </div>
       )}
 
-      {/* ── NOTIFICATIONS LIST ── */}
       {!loading && displayed.length > 0 && (
         <div style={styles.list}>
           {displayed.map((n) => {
@@ -134,12 +125,10 @@ export default function NotificationsPage() {
                 }}
                 onClick={() => !n.isRead && markAsRead(n._id)}
               >
-                {/* Icon */}
                 <div style={{ ...styles.iconWrap, background: config.bg }}>
                   <i className={`bi ${config.icon}`} style={{ color: config.color, fontSize: 18 }} />
                 </div>
 
-                {/* Content */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={styles.cardTop}>
                     <span style={{ ...styles.typeBadge, background: config.bg, color: config.color }}>
@@ -152,7 +141,6 @@ export default function NotificationsPage() {
                   </p>
                 </div>
 
-                {/* Unread dot */}
                 {!n.isRead && <div style={styles.unreadDot} />}
               </div>
             );
@@ -163,7 +151,6 @@ export default function NotificationsPage() {
   );
 }
 
-// ── STYLES ──
 const styles = {
   page: {
     maxWidth: 680,

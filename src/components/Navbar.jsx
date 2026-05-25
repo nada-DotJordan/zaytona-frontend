@@ -34,7 +34,6 @@ export default function Navbar() {
   const [unreadCount, setUnreadCount]   = useState(0);
   const dropRef                         = useRef(null);
 
-  // ── جلب عدد الإشعارات الغير مقروءة ──
   useEffect(() => {
     if (!isLoggedIn) return;
 
@@ -50,12 +49,10 @@ export default function Navbar() {
 
     fetchUnread();
 
-    // تحديث العداد كل 60 ثانية تلقائياً
     const interval = setInterval(fetchUnread, 60000);
     return () => clearInterval(interval);
   }, [isLoggedIn]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e) {
       if (dropRef.current && !dropRef.current.contains(e.target)) {
@@ -83,7 +80,6 @@ export default function Navbar() {
     navigate("/");
   }
 
-  // لما يضغط على زر الإشعارات — يروح للصفحة ويصفّر العداد
   function handleNotifClick() {
     setUnreadCount(0);
     navigate("/notifications");
@@ -106,7 +102,6 @@ export default function Navbar() {
         direction: isRtl ? "rtl" : "ltr",
       }}>
 
-        {/* ── LOGO ── */}
         <NavLink to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
             <circle cx="18" cy="18" r="18" fill="#3d5a27" />
@@ -118,7 +113,6 @@ export default function Navbar() {
           </span>
         </NavLink>
 
-        {/* ── NAV LINKS ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <NavLink to="/" end style={linkStyle}>{translations[lang].home}</NavLink>
           <NavLink to="/Products" style={linkStyle}>{isRtl ? "المنتجات" : "Products"}</NavLink>
@@ -127,12 +121,11 @@ export default function Navbar() {
           <NavLink to="/tracking" style={linkStyle}>{isRtl ? "رحلة الزيت" : "Oil Journey"}</NavLink>
         </div>
 
-        {/* ── RIGHT ACTIONS ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
 
           {isLoggedIn ? (
             <>
-              {/* ── NOTIFICATIONS BELL ── */}
+              {/* ── NOTIFICATIONS ── */}
               <button
                 onClick={handleNotifClick}
                 title={isRtl ? "الإشعارات" : "Notifications"}
@@ -148,7 +141,6 @@ export default function Navbar() {
                   transition: "border-color 0.2s",
                 }}
               >
-                {/* Bell icon */}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke={COLORS.oliveDark} strokeWidth="2"
                   strokeLinecap="round" strokeLinejoin="round">
@@ -156,7 +148,6 @@ export default function Navbar() {
                   <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
 
-                {/* عداد الإشعارات الغير مقروءة */}
                 {unreadCount > 0 && (
                   <span style={{
                     position: "absolute",
@@ -204,7 +195,7 @@ export default function Navbar() {
                 </div>
               </NavLink>
 
-              {/* ── PROFILE DROPDOWN ── */}
+              {/* ── PROFILE ── */}
               <div ref={dropRef} style={{ position: "relative" }}>
                 <button
                   onClick={() => setDropOpen(o => !o)}
@@ -240,7 +231,6 @@ export default function Navbar() {
                     zIndex: 200,
                   }}>
 
-                    {/* Profile header */}
                     <div style={{
                       background: `linear-gradient(135deg, ${COLORS.oliveDark}, ${COLORS.oliveMid})`,
                       padding: "20px 16px 16px",
@@ -275,10 +265,8 @@ export default function Navbar() {
                       )}
                     </div>
 
-                    {/* Menu items */}
                     <div style={{ padding: "8px 0" }}>
 
-                      {/* Notifications في الـ dropdown أيضاً مع العداد */}
                       <button
                         onClick={() => { setDropOpen(false); handleNotifClick(); }}
                         style={menuItemStyle}
@@ -338,7 +326,6 @@ export default function Navbar() {
 
                       <div style={{ height: 1, background: COLORS.border, margin: "6px 0" }} />
 
-                      {/* Language toggle */}
                       <button
                         onClick={() => { toggleLang(); setDropOpen(false); }}
                         style={menuItemStyle}
@@ -351,7 +338,6 @@ export default function Navbar() {
                         <span>{isRtl ? "English" : "العربية"}</span>
                       </button>
 
-                      {/* Sign Out */}
                       <button
                         onClick={handleLogout}
                         style={{ ...menuItemStyle, color: "#c0392b" }}

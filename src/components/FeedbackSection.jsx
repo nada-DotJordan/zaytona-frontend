@@ -1,4 +1,3 @@
-// src/components/FeedbackSection.jsx
 import { useState, useContext } from "react";
 import { LanguageContext } from "../languages/LanguageContext";
 import { useReviews, postReview, useFarms } from "../api/api";
@@ -66,7 +65,6 @@ const TEXT = {
   },
 };
 
-// ── shared micro-styles ───────────────────────────────────────
 const labelStyle = {
   display: "block", fontSize: "0.7rem", fontWeight: 700,
   color: COLORS.textMuted, textTransform: "uppercase",
@@ -114,7 +112,7 @@ function Stars({ count, size = 18, interactive = false, onSelect }) {
 
 export default function FeedbackSection() {
   const { lang }    = useContext(LanguageContext);
-  const { user }    = useAuth(); // يفترض أن الأوبجكت يحتوي على user.isAdmin أو user.role
+  const { user }    = useAuth(); 
   const navigate    = useNavigate();
   const t           = TEXT[lang];
   const isRtl       = lang === "ar";
@@ -129,7 +127,6 @@ export default function FeedbackSection() {
   const [filter, setFilter]         = useState("all");
   const [deletingId, setDeletingId] = useState(null);
 
-  // فحص صلاحية الآدمين البرمجية في الفرونت إند
   const isUserAdmin = user && (user.isAdmin === true || user.role === "admin");
 
   const filtered = filter === "all"
@@ -185,7 +182,6 @@ export default function FeedbackSection() {
     <section style={{ padding: "80px 0" }} dir={isRtl ? "rtl" : "ltr"}>
       <div className="container">
 
-        {/* Section Header */}
         <p style={{
           fontSize: "0.68rem", letterSpacing: "2.5px", textTransform: "uppercase",
           color: COLORS.oliveLight, fontWeight: 700, marginBottom: 8,
@@ -203,7 +199,6 @@ export default function FeedbackSection() {
         </p>
 
         <div className="row g-4">
-          {/* LEFT: Form */}
           <div className="col-lg-4">
             <div style={{
               background: "#fff", border: `1px solid ${COLORS.border}`,
@@ -310,7 +305,6 @@ export default function FeedbackSection() {
             </div>
           </div>
 
-          {/* RIGHT: List */}
           <div className="col-lg-8">
             {avg && (
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
@@ -347,7 +341,6 @@ export default function FeedbackSection() {
             )}
 
             {filtered.map((r) => {
-              // شرط العرض المحدث: يظهر الزرار إذا كان المستخدم هو الـ Admin أو إذا كان صاحب التقييم نفسه
               const canDelete = isUserAdmin || (user && (r.userId === user._id || r.name === (user.nameEn || user.nameAr)));
 
               return (
@@ -359,7 +352,6 @@ export default function FeedbackSection() {
                     display: "flex", flexDirection: "column", gap: 8
                   }}
                 >
-                  {/* Farm Badge */}
                   <p style={{
                     fontSize: "0.7rem", fontWeight: 700, letterSpacing: "1px",
                     textTransform: "uppercase", color: COLORS.oliveLight, margin: 0,
@@ -367,7 +359,6 @@ export default function FeedbackSection() {
                     🌿 {lang === "en" ? r.farmId?.nameEn : r.farmId?.nameAr}
                   </p>
 
-                  {/* Top Row: User Meta & Stars */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 6 }}>
                     <div>
                       <div style={{ fontFamily: "Georgia, serif", fontSize: "0.95rem", color: COLORS.oliveDark, fontWeight: 600 }}>
@@ -380,12 +371,10 @@ export default function FeedbackSection() {
                     <Stars count={r.rating} size={15} />
                   </div>
 
-                  {/* Comment Text */}
                   <p style={{ fontSize: "0.84rem", color: COLORS.textMuted, lineHeight: 1.75, margin: "4px 0 0 0" }}>
                     {r.comment}
                   </p>
 
-                  {/* كبسة الحذف بالأسفل بناءً على الشروط الجديدة */}
                   {canDelete && (
                     <div style={{ display: "flex", justifyContent: isRtl ? "flex-start" : "flex-end", marginTop: 4 }}>
                       <button

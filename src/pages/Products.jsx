@@ -15,9 +15,6 @@ import rawda from "../assets/rawda.jpg";
 import p     from "../assets/p.jpg";
 import hero  from "../assets/hero.jpg";
 
-// ─────────────────────────────────────────────
-// 🎨  COLORS
-// ─────────────────────────────────────────────
 const COLORS = {
   oliveDark:  "#2c3d1f",
   oliveMid:   "#3d5a27",
@@ -30,9 +27,6 @@ const COLORS = {
   textMuted:  "#7a7a6e",
 };
 
-// ─────────────────────────────────────────────
-// 🖼️  Farm image map (keyed by English name)
-// ─────────────────────────────────────────────
 const IMG_MAP = {
   "Al-Baraka Farm":        Baraka,
   "Green Valley Farm":     GVF,
@@ -44,9 +38,6 @@ const IMG_MAP = {
   "Safouri Heritage Farm": p,
 };
 
-// ─────────────────────────────────────────────
-// 📝  TEXT
-// ─────────────────────────────────────────────
 const TEXT = {
   en: {
     pageTitle:     "Our Marketplace",
@@ -78,9 +69,6 @@ const TEXT = {
   },
 };
 
-// ─────────────────────────────────────────────
-// 🏷️  Badge color helper
-// ─────────────────────────────────────────────
 function badgeColor(badge) {
   if (!badge) return null;
   const map = {
@@ -107,9 +95,6 @@ function badgeColor(badge) {
   return map[badge] || { bg: COLORS.border, color: COLORS.textDark };
 }
 
-// ─────────────────────────────────────────────
-// 🃏  PRODUCT CARD
-// ─────────────────────────────────────────────
 function ProductCard({ prod, lang, t }) {
   const { addToCart } = useCart();
   const versions      = prod.versions || [];
@@ -146,7 +131,6 @@ function ProductCard({ prod, lang, t }) {
       onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 24px rgba(44,61,31,0.10)")}
       onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
     >
-      {/* Image */}
       <div style={{ width: 160, minWidth: 160, position: "relative", flexShrink: 0 }}>
         <img
           src={img}
@@ -171,10 +155,8 @@ function ProductCard({ prod, lang, t }) {
         )}
       </div>
 
-      {/* Content */}
       <div style={{ padding: "1rem 1.2rem", flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
 
-        {/* Top */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
             <span style={{ fontSize: "0.68rem", fontWeight: 700, color: COLORS.oliveLight, letterSpacing: "1px", textTransform: "uppercase" }}>
@@ -228,7 +210,6 @@ function ProductCard({ prod, lang, t }) {
           </div>
         </div>
 
-        {/* Bottom: price + button */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, flexWrap: "wrap", gap: 8 }}>
           <div>
             <span style={{ fontSize: "0.72rem", color: COLORS.textMuted }}>{t.from} </span>
@@ -261,9 +242,6 @@ function ProductCard({ prod, lang, t }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// 📄  PRODUCTS PAGE
-// ─────────────────────────────────────────────
 export default function Products() {
   const { lang }    = useContext(LanguageContext);
   const { farms, loading: farmsLoading }       = useFarms();
@@ -272,7 +250,6 @@ export default function Products() {
   const t       = TEXT[lang];
   const loading = farmsLoading || productsLoading;
 
-  // Support navigating here with a pre-selected farm (e.g. from Home page)
   const location         = useLocation();
   const initialFarmId    = location.state?.farmId ?? "";
   const [activeFarmId, setActiveFarmId] = useState(initialFarmId);
@@ -284,7 +261,6 @@ export default function Products() {
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }}>
 
-      {/* HERO */}
       <div style={{
         background: `linear-gradient(rgba(30,50,20,0.82), rgba(30,50,20,0.82)), url(${hero}) center/cover no-repeat`,
         padding: "70px 0 50px",
@@ -303,14 +279,12 @@ export default function Products() {
 
       <div className="container" style={{ paddingTop: 48, paddingBottom: 80 }}>
 
-        {/* FARM FILTER TABS */}
         {!farmsLoading && (
           <div style={{
             display: "flex", flexWrap: "wrap", gap: 8,
             marginBottom: 36, paddingBottom: 20,
             borderBottom: `1px solid ${COLORS.border}`,
           }}>
-            {/* All Farms */}
             <button
               onClick={() => setActiveFarmId("")}
               style={{
@@ -325,7 +299,6 @@ export default function Products() {
               {t.filterAll}
             </button>
 
-            {/* Per-farm */}
             {farms.map((f) => {
               const isActive = f._id === activeFarmId;
               return (
@@ -348,19 +321,16 @@ export default function Products() {
           </div>
         )}
 
-        {/* LOADING */}
         {loading && (
           <p style={{ textAlign: "center", color: COLORS.textMuted }}>{t.loading}</p>
         )}
 
-        {/* COUNT */}
         {!loading && (
           <p style={{ fontSize: "0.78rem", color: COLORS.textMuted, marginBottom: 20 }}>
             {t.productsFound(filtered.length)}
           </p>
         )}
 
-        {/* LIST */}
         <div>
           {filtered.map((prod) => (
             <ProductCard
@@ -372,7 +342,6 @@ export default function Products() {
           ))}
         </div>
 
-        {/* EMPTY */}
         {!loading && filtered.length === 0 && (
           <p style={{ textAlign: "center", color: COLORS.textMuted }}>{t.noResults}</p>
         )}

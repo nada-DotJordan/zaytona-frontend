@@ -24,7 +24,6 @@ const COLORS = {
   textMuted:   "#7a7a6e",
 };
 
-// إعدادات مراحل التتبع الخمسة
 const STAGES = [
   { key: "harvest",   icon: "🫒", labelEn: "Harvest",   labelAr: "القطاف"    },
   { key: "pressing",  icon: "⚙️", labelEn: "Pressing",  labelAr: "العصر"     },
@@ -33,7 +32,6 @@ const STAGES = [
   { key: "ready",     icon: "✅", labelEn: "Ready",     labelAr: "جاهز للبيع" },
 ];
 
-// ── البيانات الكاملة للمنتجات الـ 16 مع إصداراتها بدون السعر ──
 const PRODUCTS_BASE = [
   {
     id: 1,
@@ -401,7 +399,6 @@ export default function OilTracking() {
 
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }} dir={isAr ? "rtl" : "ltr"}>
-      {/* بنر الهيرو */}
       <div style={{
   background: `linear-gradient(rgba(30,50,20,0.82), rgba(30,50,20,0.82)), url(${hero}) center/cover no-repeat`,
   padding: "70px 0 50px",
@@ -419,7 +416,6 @@ export default function OilTracking() {
 </div>
       <div style={{ maxWidth: 850, margin: "0 auto", padding: "30px 20px 80px" }}>
         
-        {/* فلتر المزارع السريع */}
         <div style={{ display: "flex", gap: 16, marginBottom: 24, padding: "14px 18px", background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 10 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
             <label style={{ fontSize: "0.65rem", fontWeight: 700, color: COLORS.textMuted, textTransform: "uppercase" }}>{t.filterFarm}</label>
@@ -434,7 +430,6 @@ export default function OilTracking() {
           </div>
         </div>
 
-        {/* قائمة المنتجات الـ 16 كاملة */}
         {filteredProducts.length === 0 ? (
           <div style={{ textAlign: "center", padding: "40px 20px", color: COLORS.textMuted, background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 10 }}>
             🫙 {t.noResult}

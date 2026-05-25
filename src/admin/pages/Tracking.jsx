@@ -1,23 +1,20 @@
-// src/admin/pages/Tracking.jsx
 import { useState, useEffect } from "react";
 import { COLORS } from "../styles/colors";
 import { GoldLine, StatusBadge } from "../components/ui/Primitives";
-import api from "../../api/api"; // الـ axios instance المربوط بالباك إند
+import api from "../../api/api"; 
 
 export default function Tracking() {
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // States الخاصة بالبحث والتتبع
   const [trackInput, setTrackInput] = useState("");
   const [trackResult, setTrackResult] = useState(null);
   const [searching, setSearching] = useState(false);
 
-  // 1. جلب قائمة سجلات إنتاج وتتبع الزيت الحية عند تحميل الصفحة
   useEffect(() => {
     async function fetchTrackingLogs() {
       try {
-        const res = await api.get("/admin/tracking"); // الراوت الخاص بسجلات الإنتاج
+        const res = await api.get("/admin/tracking"); 
         setBatches(res.data);
       } catch (err) {
         console.error("Failed to fetch live tracking data:", err);
@@ -28,7 +25,6 @@ export default function Tracking() {
     fetchTrackingLogs();
   }, []);
 
-  // 2. دالة البحث الفوري عن Batch محدد داخل قاعدة البيانات (Live Lookup)
   async function runTracking() {
     const query = trackInput.trim();
     if (!query) {
@@ -38,12 +34,10 @@ export default function Tracking() {
 
     setSearching(true);
     try {
-      // إرسال طلب تتبع مباشر للسيرفر باستخدام الـ ID أو رقم الـ Batch
       const res = await api.get(`/admin/tracking/${query}`);
       setTrackResult(res.data);
     } catch (err) {
       console.error("Batch lookup error:", err);
-      // في حال عدم وجود الـ Batch أو حدوث خطأ 404
       setTrackResult({ notFound: true, query });
     } finally {
       setSearching(false);
@@ -54,7 +48,6 @@ export default function Tracking() {
     <div>
       <GoldLine />
 
-      {/* ── LOOKUP CARD ── */}
       <div className="za-card mb-3">
         <div className="za-card-header">
           <span className="za-card-title">
@@ -86,7 +79,6 @@ export default function Tracking() {
             </button>
           </div>
 
-          {/* Dynamic Result Panel */}
           {trackResult && (
             <div style={{ marginTop: 14 }}>
               {trackResult.notFound ? (
@@ -116,7 +108,6 @@ export default function Tracking() {
         </div>
       </div>
 
-      {/* ── RECENT BATCHES TABLE ── */}
       <div className="za-card">
         <div className="za-card-header">
           <span className="za-card-title">Recent supply chain activity</span>

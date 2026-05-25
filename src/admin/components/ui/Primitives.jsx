@@ -1,11 +1,9 @@
 import { COLORS } from "../../styles/colors";
 
-// ── Gold accent line at top of every section ──
 export function GoldLine() {
   return <div className="za-gold-line" />;
 }
 
-// ── Colored status / label pill ──
 const STATUS_CLASS = {
   Pending:           "za-badge-amber",
   Processing:        "za-badge-blue",
@@ -26,7 +24,6 @@ export function StatusBadge({ status }) {
   );
 }
 
-// ── Single bar row for bar charts ──
 export function BarRow({ label, val, max, labelWidth = "80px" }) {
   return (
     <div className="za-bar-row">
@@ -44,7 +41,6 @@ export function BarRow({ label, val, max, labelWidth = "80px" }) {
   );
 }
 
-// ── KPI metric card ──
 export function MetricCard({ icon, label, value, delta, deltaDir, iconStyle }) {
   return (
     <div className="za-metric">
@@ -63,7 +59,6 @@ export function MetricCard({ icon, label, value, delta, deltaDir, iconStyle }) {
   );
 }
 
-// ── Initials avatar helper (non-component) ──
 export function initials(name) {
   return name
     .split(" ")

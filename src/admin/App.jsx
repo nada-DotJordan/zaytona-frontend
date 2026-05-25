@@ -13,13 +13,13 @@ import Orders        from "./pages/Orders";
 import Tracking      from "./pages/Tracking";
 import Notifications from "./pages/Notifications";
 import Customers     from "./pages/Customers";
-import AdminReviews  from "./pages/AdminReviews"; // 1. استيراد صفحة التقييمات الجديدة ←
+import AdminReviews  from "./pages/AdminReviews";
 
 injectGlobalStyles();
 
 export default function AdminApp() {
   const [active, setActive]          = useState("dashboard");
-  const { farms, setFarms, loading } = useFarms();  // ← live from MongoDB
+  const { farms, setFarms, loading } = useFarms();  
 
   const renderPage = () => {
     switch (active) {
@@ -31,7 +31,7 @@ export default function AdminApp() {
       case "tracking":      return <Tracking />;
       case "notifications": return <Notifications />;
       case "users":         return <Customers />;
-      case "reviews":       return <AdminReviews />; // 2. إضافة الـ case الخاصة بالتقييمات ←
+      case "reviews":       return <AdminReviews />;
       default:              return <Dashboard />;
     }
   };

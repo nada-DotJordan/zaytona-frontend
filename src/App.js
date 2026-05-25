@@ -1,9 +1,8 @@
-// src/App.js
 import { AuthProvider } from "./context/AuthContext";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { LanguageContext } from "./languages/LanguageContext";
-import { CartProvider } from "./context/CartContext";   // ← ADD THIS
+import { CartProvider } from "./context/CartContext";  
 import Navbar    from "./components/Navbar";
 import Footer    from "./components/Footer";
 import Home      from "./pages/Home";

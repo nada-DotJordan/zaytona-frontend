@@ -1,4 +1,3 @@
-// src/admin/pages/Farms.jsx
 import { useState } from "react";
 import { COLORS } from "../styles/colors";
 import { GOVERNORATES } from "../data/mockData";
@@ -19,7 +18,6 @@ export default function Farms({ farms, setFarms }) {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  // Filter the farms list for display (farms come from MongoDB via props)
   const filtered = farms.filter((f) => {
     const name  = f.nameEn || f.name || "";
     const owner = f.owner  || "";
@@ -31,7 +29,6 @@ export default function Farms({ farms, setFarms }) {
     );
   });
 
-  // 1. إضافة مزرعة حقيقية مع إرسال الـ National ID للداتابيز
   async function handleAdd() {
     if (!form.name || !form.farmname) {
       alert("Please fill owner name and farm name.");
@@ -45,7 +42,7 @@ export default function Farms({ farms, setFarms }) {
         owner:      form.name,
         phone:      form.phone      || "—",
         email:      form.email      || "—",
-        nationalId: form.nationalId || "—", // ← تم إصلاح الربط هنا ليخزن بالباك إند
+        nationalId: form.nationalId || "—", 
         gov:        form.gov        || "—",
         addr:       form.addr       || "—",
         gps:        form.gps        || "—",
@@ -65,7 +62,6 @@ export default function Farms({ farms, setFarms }) {
     }
   }
 
-  // 2. حذف المزرعة نهائياً من الـ Live MongoDB
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this farm from Zaytona database?")) return;
     try {
@@ -77,13 +73,12 @@ export default function Farms({ farms, setFarms }) {
     }
   }
 
-  // 3. تعديل المزرعة بشكل مرن (Prompt منسق ومحدّث على السيرفر)
   async function handleEdit(id) {
     const farm = farms.find((x) => (x._id || x.id) === id);
     if (!farm) return;
     
     const nname = window.prompt("Update Farm Name (EN):", farm.nameEn || farm.name);
-    if (nname === null) return; // إلغاء العملية
+    if (nname === null) return; 
     
     const nphone = window.prompt("Update Owner Phone:", farm.phone || "");
     const naddr  = window.prompt("Update Detailed Address:", farm.addr || "");
@@ -109,7 +104,6 @@ export default function Farms({ farms, setFarms }) {
     <div>
       <GoldLine />
 
-      {/* ── ADD FORM CARD ── */}
       <div className="za-card mb-3">
         <div className="za-card-header">
           <span className="za-card-title">
@@ -209,7 +203,6 @@ export default function Farms({ farms, setFarms }) {
         )}
       </div>
 
-      {/* ── SEARCH + FILTER ── */}
       <div className="row g-2 mb-3">
         <div className="col-md-8">
           <div className="za-search-wrap">

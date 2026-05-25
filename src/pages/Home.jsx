@@ -1,10 +1,10 @@
-// src/pages/Home.jsx
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../languages/LanguageContext";
 import { FaLeaf, FaTruck, FaBox, FaFlask } from "react-icons/fa";
 import { useProducts } from "../api/api";
 import FeedbackSection from "../components/FeedbackSection";
+import { useAuth } from "../auth/AuthContext";
 
 import Baraka    from "../assets/Baraka.png";
 import GVF       from "../assets/GVF.png";
@@ -122,6 +122,7 @@ export default function Home() {
   const steps                 = [t.step1, t.step2, t.step3, t.step4];
   const icons                 = [FaLeaf, FaFlask, FaBox, FaTruck];
   const isRtl                 = lang === "ar";
+  const { isAuthenticated } = useContext(AuthContext);
 
   const displayProducts = products.slice(0, 4);
 
@@ -149,12 +150,23 @@ export default function Home() {
               <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1rem", lineHeight: 1.7, marginBottom: "2rem" }}>
                 {t.heroSubtitle}
               </p>
-              <button
-                onClick={() => navigate("/register")}
-                style={{ background: COLORS.oliveLight, border: "none", color: "#fff", padding: "13px 28px", borderRadius: 6, fontSize: "0.9rem", fontWeight: 500, cursor: "pointer" }}
-              >
-                {t.heroButton}
-              </button>
+              {!isAuthenticated && (
+                <button
+                  onClick={() => navigate("/register")}
+                  style={{ 
+                    background: COLORS.oliveLight, 
+                    border: "none", 
+                    color: "#fff", 
+                    padding: "13px 28px", 
+                    borderRadius: 6, 
+                    fontSize: "0.9rem", 
+                    fontWeight: 500, 
+                    cursor: "pointer" 
+                  }}
+                >
+                  {t.heroButton}
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,3 @@
-// src/pages/Farms.jsx
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../languages/LanguageContext";
@@ -14,9 +13,6 @@ import f7   from "../assets/f7.jpg";
 import f8   from "../assets/f8.jpg";
 import hero from "../assets/hero.jpg";
 
-// ─────────────────────────────────────────────
-// 🎨  COLORS
-// ─────────────────────────────────────────────
 const COLORS = {
   oliveDark:  "#2c3d1f",
   oliveMid:   "#3d5a27",
@@ -29,10 +25,6 @@ const COLORS = {
   textMuted:  "#7a7a6e",
 };
 
-// ─────────────────────────────────────────────
-// 📦  Static extra info per farm (keyed by English name)
-//     Merged with live API data at render time
-// ─────────────────────────────────────────────
 const FARM_EXTRA_EN = {
   "Al-Baraka Farm": {
     img: f1, tag: "Best Seller Oils", tagColor: COLORS.gold,
@@ -151,9 +143,7 @@ const FARM_EXTRA_AR = {
   },
 };
 
-// ─────────────────────────────────────────────
-// 📝  TEXT
-// ─────────────────────────────────────────────
+
 const TEXT = {
   en: {
     heroLabel:     "OUR PARTNER FARMS",
@@ -185,9 +175,6 @@ const TEXT = {
   },
 };
 
-// ─────────────────────────────────────────────
-// 🃏  FARM CARD
-// ─────────────────────────────────────────────
 function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
   const extraMap = lang === "en" ? FARM_EXTRA_EN : FARM_EXTRA_AR;
   const extra    = extraMap[farm.nameEn] || {};
@@ -213,7 +200,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
-      {/* Image */}
       <div style={{ width: 220, minWidth: 220, position: "relative", flexShrink: 0 }}>
         <img
           src={extra.img}
@@ -240,7 +226,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
         )}
       </div>
 
-      {/* Content */}
       <div style={{
         padding: "1.4rem 1.6rem",
         flexGrow: 1,
@@ -249,7 +234,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
         justifyContent: "space-between",
       }}>
 
-        {/* Top */}
         <div>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 8 }}>
             <h4 style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1.15rem", color: COLORS.textDark, margin: 0 }}>
@@ -269,17 +253,14 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
             </span>
           </div>
 
-          {/* Location */}
           <p style={{ fontSize: "0.75rem", color: COLORS.gold, fontWeight: 600, marginBottom: 10, letterSpacing: "0.5px" }}>
             📍 {extra.location}
           </p>
 
-          {/* Description */}
           <p style={{ fontSize: "0.83rem", color: COLORS.textMuted, lineHeight: 1.75, margin: "0 0 14px" }}>
             {extra.description}
           </p>
 
-          {/* Highlights */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 4 }}>
             {(extra.highlights || []).map((h, i) => (
               <span key={i} style={{
@@ -297,7 +278,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
           </div>
         </div>
 
-        {/* Contact */}
         <div style={{ display: "flex", gap: 20, marginTop: 14, flexWrap: "wrap" }}>
           <a href={`mailto:${extra.email}`} style={{ fontSize: "0.75rem", color: COLORS.textMuted, textDecoration: "none", display: "flex", alignItems: "center", gap: 5 }}>
             ✉️ {extra.email}
@@ -307,7 +287,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
           </a>
         </div>
 
-        {/* Button */}
         <div style={{ marginTop: 16 }}>
           <button
             onClick={() => onViewProducts(farm._id)}
@@ -334,9 +313,6 @@ function FarmCard({ farm, productCount, t, lang, onViewProducts }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// 📄  FARMS PAGE
-// ─────────────────────────────────────────────
 export default function Farms() {
   const { lang } = useContext(LanguageContext);
   const navigate = useNavigate();
@@ -347,7 +323,6 @@ export default function Farms() {
   const t       = TEXT[lang];
   const loading = farmsLoading || productsLoading;
 
-  // Count products per farm _id
   function productCount(farmId) {
     return products.filter((p) => p.farmId?._id === farmId).length;
   }
@@ -361,7 +336,6 @@ export default function Farms() {
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }}>
 
-      {/* HERO */}
       <div style={{
         background: `linear-gradient(rgba(30,50,20,0.80), rgba(30,50,20,0.80)), url(${hero}) center/cover no-repeat`,
         padding: "70px 0 50px",
@@ -377,7 +351,6 @@ export default function Farms() {
           {t.heroSubtitle}
         </p>
 
-        {/* Stats bar */}
         <div style={{
           display: "inline-flex",
           gap: 0,
@@ -401,7 +374,6 @@ export default function Farms() {
         </div>
       </div>
 
-      {/* FARM CARDS */}
       <div className="container" style={{ paddingTop: 52, paddingBottom: 80 }}>
 
         {loading && (

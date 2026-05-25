@@ -19,7 +19,6 @@ export default function Topbar({ activeSection }) {
     ? user.nameEn.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)
     : "AD";
 
-  // Close on outside click
   useEffect(() => {
     function handle(e) {
       if (dropRef.current && !dropRef.current.contains(e.target))
@@ -43,7 +42,6 @@ export default function Topbar({ activeSection }) {
           {formattedDate}
         </span>
 
-        {/* ── Go to Site button ── */}
         <button
           onClick={() => navigate("/")}
           style={{
@@ -73,7 +71,6 @@ export default function Topbar({ activeSection }) {
           View Site
         </button>
 
-        {/* ── Profile Dropdown ── */}
         <div ref={dropRef} style={{ position: "relative" }}>
           <button
             onClick={() => setDropOpen(o => !o)}
@@ -108,7 +105,6 @@ export default function Topbar({ activeSection }) {
             </svg>
           </button>
 
-          {/* Dropdown */}
           {dropOpen && (
             <div style={{
               position: "absolute", top: "calc(100% + 8px)", right: 0,
@@ -117,7 +113,6 @@ export default function Topbar({ activeSection }) {
               boxShadow: "0 8px 32px rgba(44,61,31,0.13)",
               overflow: "hidden", zIndex: 300,
             }}>
-              {/* Header */}
               <div style={{
                 background: `linear-gradient(135deg, ${COLORS.oliveDark || "#2c3d1f"}, ${COLORS.oliveMid || "#3d5a27"})`,
                 padding: "14px 16px",
@@ -139,7 +134,6 @@ export default function Topbar({ activeSection }) {
                 </p>
               </div>
 
-              {/* Items */}
               <div style={{ padding: "6px 0" }}>
 
                 {/* Go to main site */}
@@ -149,14 +143,12 @@ export default function Topbar({ activeSection }) {
                   onClick={() => { setDropOpen(false); navigate("/"); }}
                 />
 
-                {/* Products */}
                 <DropItem
                   icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>}
                   label="Browse Products"
                   onClick={() => { setDropOpen(false); navigate("/Products"); }}
                 />
 
-                {/* Farms */}
                 <DropItem
                   icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>}
                   label="Browse Farms"
@@ -165,7 +157,6 @@ export default function Topbar({ activeSection }) {
 
                 <div style={{ height: 1, background: "#e2d9c5", margin: "6px 0" }} />
 
-                {/* Sign Out */}
                 <DropItem
                   icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c0392b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>}
                   label="Sign Out"
@@ -181,7 +172,6 @@ export default function Topbar({ activeSection }) {
   );
 }
 
-// ── Small reusable dropdown item ──
 function DropItem({ icon, label, onClick, red }) {
   const [hovered, setHovered] = useState(false);
   return (

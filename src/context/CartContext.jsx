@@ -3,7 +3,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  // ✅ load from localStorage on first render
   const [items, setItems] = useState(() => {
     try {
       const saved = localStorage.getItem("zaytona_cart");
@@ -13,7 +12,6 @@ export function CartProvider({ children }) {
     }
   });
 
-  // ✅ save to localStorage whenever items change
   useEffect(() => {
     localStorage.setItem("zaytona_cart", JSON.stringify(items));
   }, [items]);

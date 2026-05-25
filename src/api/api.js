@@ -13,7 +13,7 @@ api.interceptors.request.use((config) => {
 
 export default api;
 
-//FARMS HOOK 
+//farms hook
 export function useFarms() {
   const [farms, setFarms]     = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,7 @@ export function useFarms() {
   return { farms, setFarms, loading, refetch: fetchFarms };
 }
 
-//PRODUCTS HOOK 
+//products hook
 export function useProducts(farmId = null) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -46,7 +46,7 @@ export function useProducts(farmId = null) {
   return { products, setProducts, loading, refetch: fetchProducts };
 }
 
-//REVIEWS HOOK 
+//reviews hook
 export function useReviews(farmId = null) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);

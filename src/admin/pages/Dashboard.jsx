@@ -1,19 +1,17 @@
-// src/admin/pages/Dashboard.jsx
 import { useState, useEffect } from "react";
 import { COLORS } from "../styles/colors";
-import { dailyOrderData, activityFeed } from "../data/mockData"; // أبقينا المخططات اليومية والنشاط مؤقتاً لحين بناء اللوجيك الخاص بها
+import { dailyOrderData, activityFeed } from "../data/mockData"; 
 import { GoldLine, MetricCard, BarRow } from "../components/ui/Primitives";
-import api from "../../api/api"; // الـ axios instance تبعك
+import api from "../../api/api";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. جلب الإحصائيات الشاملة من الباك إند فور تحميل الصفحة
   useEffect(() => {
     async function fetchDashboardStats() {
       try {
-        const res = await api.get("/admin/stats"); // الراوت الموحد للإحصائيات في admin.js
+        const res = await api.get("/admin/stats"); 
         setStats(res.data);
       } catch (err) {
         console.error("Failed to fetch dashboard statistics:", err);
@@ -28,12 +26,10 @@ export default function Dashboard() {
     <div>
       <GoldLine />
 
-      {/* ── LOADING STATE ── */}
       {loading ? (
         <p style={{ color: COLORS.textMuted, padding: 20 }}>Loading platform analytics...</p>
       ) : (
         <>
-          {/* ── KPI METRICS (LIVE FROM MONGO) ── */}
           <div className="row g-3 mb-4">
             <div className="col-md-3">
               <MetricCard 
@@ -74,7 +70,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ── BAR CHART + ACTIVITY ── */}
           <div className="row g-3 mb-3">
             <div className="col-md-6">
               <div className="za-card">
@@ -109,7 +104,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ── STATUS + TOP PRODUCTS ── */}
           <div className="row g-3">
             <div className="col-md-6">
               <div className="za-card">
@@ -121,7 +115,7 @@ export default function Dashboard() {
                     ["Pending confirmation", "za-badge-amber", "6"],
                     ["Processing", "za-badge-blue", "9"],
                     ["Out for delivery", "za-badge-amber", "4"],
-                    ["Delivered", "za-badge-green", stats?.orders ?? 0], // ربط مرن مؤقت يعتمد على الإجمالي الكلي للمبيعات الناجحة
+                    ["Delivered", "za-badge-green", stats?.orders ?? 0], 
                     ["Cancelled", "za-badge-red", "3"],
                   ].map(([label, cls, val]) => (
                     <div key={label} className="za-stat-row">

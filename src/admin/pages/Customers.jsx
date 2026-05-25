@@ -1,4 +1,3 @@
-// src/admin/pages/Customers.jsx
 import { useState, useEffect } from "react";
 import { COLORS } from "../styles/colors";
 import { GoldLine, MetricCard, initials } from "../components/ui/Primitives";
@@ -23,7 +22,6 @@ export default function Customers() {
     fetchCustomers();
   }, []);
 
-  // ✅ بحث صح بالحقول الحقيقية
   const filtered = customers.filter((u) => {
     const name  = (u.nameEn || u.nameAr || "").toLowerCase();
     const email = (u.email  || "").toLowerCase();
@@ -95,7 +93,6 @@ export default function Customers() {
               <tbody>
                 {filtered.map((u) => {
                   const id         = u._id || u.id;
-                  // ✅ اقرأ الاسم الحقيقي من الحقول الصحيحة
                   const displayName = u.nameEn || u.nameAr || "Unknown User";
                   const joinedDate  = u.createdAt
                     ? new Date(u.createdAt).toLocaleDateString()
@@ -105,7 +102,6 @@ export default function Customers() {
                     <tr key={id}>
                       <td>
                         <div className="d-flex align-items-center gap-2">
-                          {/* ✅ الـ avatar يأخذ الاسم الحقيقي */}
                           <div className="za-avatar">{initials(displayName)}</div>
                           {displayName}
                         </div>

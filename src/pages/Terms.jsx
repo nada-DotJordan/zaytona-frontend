@@ -146,7 +146,6 @@ export default function Terms() {
         </p>
       </div>
 
-      {/* CONTENT */}
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "52px 24px 80px" }}>
 
         <p style={{ fontSize: "0.78rem", color: COLORS.textMuted, marginBottom: 36, fontStyle: "italic" }}>
@@ -176,7 +175,6 @@ export default function Terms() {
           </div>
         ))}
 
-        {/* Contact box */}
         <div style={{
           background: COLORS.cream,
           border: `1px solid ${COLORS.border}`,

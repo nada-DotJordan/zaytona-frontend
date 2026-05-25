@@ -102,7 +102,6 @@ const TEXT = {
     teamTitle: "بناه أناس يعشقون الزيت الجيد.",
     teamDesc:  "زيتونة فريق من المطوّرين والمزارعين والمدافعين عن شفافية الغذاء، يعملون معاً لإعادة الأمانة إلى سوق زيت الزيتون.",
 
-    // CTA
     ctaTitle:  "مستعد لتذوّق الفرق؟",
     ctaDesc:   "تصفّح منتجاتنا وتتبّع زيتك من المزرعة إلى المائدة.",
     ctaButton: "استعرض المنتجات",
@@ -276,7 +275,6 @@ export default function About() {
               </p>
             </div>
 
-            {/* Image grid */}
             <div className={`col-md-5 ${isRtl ? "order-md-2" : ""}`}>
               <img
                 src={p2}
