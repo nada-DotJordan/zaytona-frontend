@@ -51,6 +51,33 @@ const STATUS_STYLE = {
   "cancelled": { bg: "#fce8e8", color: "#b54a4a", label: "Cancelled" },
 };
 
+const PAYMENT_METHODS = [
+  {
+    id:      "cash",
+    iconEn:  "💵",
+    labelEn: "Cash on Delivery",
+    labelAr: "الدفع عند الاستلام",
+    descEn:  "Pay when your order arrives",
+    descAr:  "ادفع عند وصول الطلب",
+  },
+  {
+    id:      "cliq",
+    iconEn:  "⚡",
+    labelEn: "CliQ",
+    labelAr: "كليك",
+    descEn:  "Instant bank transfer via CliQ",
+    descAr:  "تحويل فوري عبر كليك",
+  },
+  {
+    id:      "card",
+    iconEn:  "💳",
+    labelEn: "Credit / Debit Card",
+    labelAr: "بطاقة ائتمان / مدين",
+    descEn:  "Visa, Mastercard",
+    descAr:  "فيزا، ماستركارد",
+  },
+];
+
 const TEXT = {
   en: {
     title: "Your Cart", subtitle: "Review your olive oil selection before checkout.",
@@ -65,15 +92,27 @@ const TEXT = {
     phone: "Phone Number *", altPhone: "Alternative Phone",
     address: "Delivery Address *", deliveryDate: "Preferred Delivery Date *",
     suitableTime: "Suitable Delivery Time *",
-    anytime: "Anytime (09:00 AM – 06:00 PM)",
-    morning: "Morning (09:00 AM – 12:00 PM)",
+    anytime:   "Anytime (09:00 AM – 06:00 PM)",
+    morning:   "Morning (09:00 AM – 12:00 PM)",
     afternoon: "Afternoon (12:00 PM – 04:00 PM)",
-    evening: "Evening (04:00 PM – 07:00 PM)",
+    evening:   "Evening (04:00 PM – 07:00 PM)",
     processing: "Placing Order...",
     orderSuccess: "Order placed successfully! Scroll down to track it.",
     autoSaved: "✓ Auto-saved",
     orderSummary: "Order Summary",
     noOrders: "No orders yet.",
+    paymentTitle: "Payment Method",
+    cliqAlias:    "CliQ Alias / IBAN *",
+    cliqAliasPlaceholder: "e.g. yourname@bank",
+    cardNumber:   "Card Number *",
+    cardExpiry:   "Expiry Date *",
+    cardCvv:      "CVV *",
+    cardName:     "Name on Card *",
+    cliqNote:     "Enter your CliQ alias to confirm your transfer.",
+    cashNote:     "You will pay in cash when the order is delivered to your door.",
+    cancelOrder:  "Cancel",
+    cancelConfirm: "Cancel this order?",
+    cancelError:  "Could not cancel the order.",
   },
   ar: {
     title: "سلة مشترياتك", subtitle: "راجع اختيارك من زيت الزيتون قبل إتمام الطلب.",
@@ -88,19 +127,32 @@ const TEXT = {
     phone: "رقم الهاتف *", altPhone: "رقم بديل",
     address: "عنوان التوصيل *", deliveryDate: "تاريخ التوصيل المفضل *",
     suitableTime: "الوقت المناسب *",
-    anytime: "أي وقت (09:00 صباحاً – 06:00 مساءً)",
-    morning: "الصباح (09:00 – 12:00)",
+    anytime:   "أي وقت (09:00 صباحاً – 06:00 مساءً)",
+    morning:   "الصباح (09:00 – 12:00)",
     afternoon: "بعد الظهر (12:00 – 04:00)",
-    evening: "المساء (04:00 – 07:00)",
+    evening:   "المساء (04:00 – 07:00)",
     processing: "جاري إرسال الطلب...",
     orderSuccess: "تم إرسال طلبك بنجاح! انتقل للأسفل لتتبعه.",
     autoSaved: "✓ يتم الحفظ تلقائياً",
     orderSummary: "ملخص الطلب",
     noOrders: "لا توجد طلبات بعد.",
+    paymentTitle: "طريقة الدفع",
+    cliqAlias:    "رقم كليك / IBAN *",
+    cliqAliasPlaceholder: "مثال: yourname@bank",
+    cardNumber:   "رقم البطاقة *",
+    cardExpiry:   "تاريخ الانتهاء *",
+    cardCvv:      "CVV *",
+    cardName:     "الاسم على البطاقة *",
+    cliqNote:     "أدخل رقم كليك الخاص بك لتأكيد التحويل.",
+    cashNote:     "ستدفع نقداً عند استلام الطلب على بابك.",
+    cancelOrder:  "إلغاء",
+    cancelConfirm: "هل تريد إلغاء هذا الطلب؟",
+    cancelError:  "تعذّر إلغاء الطلب.",
   },
 };
 
 const DELIVERY_KEY = "zaytona_delivery_info";
+const PAYMENT_KEY  = "zaytona_payment_info";
 
 function StatusPill({ status }) {
   const s = STATUS_STYLE[status?.toLowerCase()] || { bg: "#fdf6b2", color: "#9f580a", label: status };
@@ -115,6 +167,7 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   const [orders, setOrders]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery]     = useState("");
+  const [cancelling, setCancelling] = useState(null); // orderId being cancelled
 
   function fetchOrders() {
     setLoading(true);
@@ -122,8 +175,20 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
       .then(r => { setOrders(r.data); setLoading(false); })
       .catch(() => setLoading(false));
   }
+  useEffect(() => { fetchOrders(); }, [highlightId]);
 
-  useEffect(() => { fetchOrders(); }, [highlightId]); 
+  async function cancelOrder(orderId) {
+    if (!window.confirm(t.cancelConfirm)) return;
+    setCancelling(orderId);
+    try {
+      await api.patch(`/orders/${orderId}`, { status: "cancelled" });
+      fetchOrders();
+    } catch {
+      alert(t.cancelError);
+    } finally {
+      setCancelling(null);
+    }
+  }
 
   const filtered = query.trim()
     ? orders.filter(o => o._id.toLowerCase().includes(query.toLowerCase()))
@@ -131,7 +196,6 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
 
   return (
     <div ref={trackingRef} style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, overflow: "hidden" }}>
-      {/* Header */}
       <div style={{ background: COLORS.oliveDark, padding: "16px 20px", display: "flex", alignItems: "center", gap: 10 }}>
         <span style={{ fontSize: "1.1rem" }}>📍</span>
         <div>
@@ -148,9 +212,7 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
             placeholder={t.trackPlaceholder}
             style={{ flex: 1, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "9px 14px", fontSize: "0.85rem", outline: "none", color: COLORS.textDark, background: COLORS.warmWhite }}
           />
-          <button onClick={fetchOrders} style={{ background: COLORS.oliveMid, color: "#fff", border: "none", borderRadius: 8, padding: "9px 20px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>
-            ↻
-          </button>
+          <button onClick={fetchOrders} style={{ background: COLORS.oliveMid, color: "#fff", border: "none", borderRadius: 8, padding: "9px 20px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>↻</button>
         </div>
 
         <div style={{ fontSize: "0.72rem", fontWeight: 700, color: COLORS.textMuted, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 10 }}>
@@ -166,31 +228,52 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.78rem" }}>
               <thead>
                 <tr style={{ borderBottom: `2px solid ${COLORS.border}` }}>
-                  {["Order ID", "Items", "Total", "Status"].map(h => (
-                    <th key={h} style={{ textAlign: isRTL ? "right" : "left", padding: "6px 10px", color: COLORS.textMuted, fontWeight: 600 }}>{h}</th>
+                  {["Order ID", "Items", "Total", "Status", ""].map((h, i) => (
+                    <th key={i} style={{ textAlign: isRTL ? "right" : "left", padding: "6px 10px", color: COLORS.textMuted, fontWeight: 600 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filtered.map(order => {
-                  const isNew = order._id === highlightId;
-                  const itemCount = order.items?.reduce((s, i) => s + i.qty, 0) || 0;
-                  const total = order.items?.reduce((s, i) => s + i.price * i.qty, 0) || 0;
+                  const isNew      = order._id === highlightId;
+                  const isPending  = order.status?.toLowerCase() === "pending";
+                  const isCancelling = cancelling === order._id;
+                  const itemCount  = order.items?.reduce((s, i) => s + i.qty, 0) || 0;
+                  const total      = order.items?.reduce((s, i) => s + i.price * i.qty, 0) || 0;
                   return (
-                    <tr key={order._id}
-                      style={{
-                        borderBottom: `1px solid ${COLORS.border}`,
-                        background: isNew ? "#f0fdf4" : "transparent",
-                        transition: "background 0.3s",
-                      }}
-                    >
+                    <tr key={order._id} style={{ borderBottom: `1px solid ${COLORS.border}`, background: isNew ? "#f0fdf4" : "transparent", transition: "background 0.3s" }}>
                       <td style={{ padding: "10px 10px", fontWeight: 700, color: COLORS.oliveDark, fontFamily: "monospace" }}>
                         #{order._id.slice(-8).toUpperCase()}
                         {isNew && <span style={{ marginLeft: 6, fontSize: "0.6rem", background: COLORS.oliveLight, color: "#fff", padding: "1px 6px", borderRadius: 10, fontFamily: "sans-serif" }}>NEW</span>}
                       </td>
                       <td style={{ padding: "10px 10px", color: COLORS.textMuted }}>{itemCount} {isRTL ? "منتج" : "item(s)"}</td>
                       <td style={{ padding: "10px 10px", fontWeight: 700, color: COLORS.textDark }}>{total.toFixed(2)} {isRTL ? "د.أ" : "JOD"}</td>
-                      <td style={{ padding: "10px 10px" }}><StatusPill status={order.status} /></td>
+                      <td style={{ padding: "10px 10px" }}>
+                        <StatusPill status={order.status} />
+                      </td>
+                      <td style={{ padding: "10px 10px" }}>
+                        {isPending && (
+                          <button
+                            onClick={() => cancelOrder(order._id)}
+                            disabled={isCancelling}
+                            style={{
+                              background: "none",
+                              border: `1px solid #c0392b`,
+                              color: "#c0392b",
+                              borderRadius: 6,
+                              padding: "3px 10px",
+                              fontSize: "0.68rem",
+                              fontWeight: 700,
+                              cursor: isCancelling ? "not-allowed" : "pointer",
+                              opacity: isCancelling ? 0.5 : 1,
+                              whiteSpace: "nowrap",
+                              transition: "opacity .15s",
+                            }}
+                          >
+                            {isCancelling ? "..." : t.cancelOrder}
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   );
                 })}
@@ -203,6 +286,143 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   );
 }
 
+function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
+  const { method, cliqAlias, cardNumber, cardExpiry, cardCvv, cardName } = paymentInfo;
+
+  function set(field, value) {
+    setPaymentInfo(prev => ({ ...prev, [field]: value }));
+  }
+
+  function handleCardNumber(val) {
+    const digits = val.replace(/\D/g, "").slice(0, 16);
+    const formatted = digits.match(/.{1,4}/g)?.join(" ") || digits;
+    set("cardNumber", formatted);
+  }
+
+  function handleExpiry(val) {
+    const digits = val.replace(/\D/g, "").slice(0, 4);
+    const formatted = digits.length > 2 ? `${digits.slice(0,2)}/${digits.slice(2)}` : digits;
+    set("cardExpiry", formatted);
+  }
+
+  return (
+    <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, marginBottom: 16 }}>
+      <div style={{
+        fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem",
+        color: COLORS.oliveDark, marginBottom: 14,
+        borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8,
+      }}>
+        💳 {t.paymentTitle}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+        {PAYMENT_METHODS.map(pm => {
+          const isSelected = method === pm.id;
+          return (
+            <button
+              key={pm.id}
+              onClick={() => set("method", pm.id)}
+              style={{
+                display: "flex", alignItems: "center", gap: 12,
+                padding: "11px 14px",
+                borderRadius: 9,
+                border: isSelected
+                  ? `2px solid ${COLORS.oliveDark}`
+                  : `1.5px solid ${COLORS.border}`,
+                background: isSelected ? "#f4f8f0" : "#fff",
+                cursor: "pointer",
+                textAlign: isRTL ? "right" : "left",
+                transition: "border .15s, background .15s",
+                width: "100%",
+              }}
+            >
+              <span style={{
+                width: 16, height: 16, borderRadius: "50%", flexShrink: 0,
+                border: `2px solid ${isSelected ? COLORS.oliveDark : COLORS.border}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {isSelected && (
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.oliveDark, display: "block" }} />
+                )}
+              </span>
+              <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>{pm.iconEn}</span>
+              <span style={{ flex: 1 }}>
+                <span style={{ display: "block", fontWeight: 700, fontSize: "0.82rem", color: COLORS.textDark }}>
+                  {isRTL ? pm.labelAr : pm.labelEn}
+                </span>
+                <span style={{ fontSize: "0.72rem", color: COLORS.textMuted }}>
+                  {isRTL ? pm.descAr : pm.descEn}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {method === "cash" && (
+        <div style={{ background: "#f4f8f0", border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 14px", fontSize: "0.78rem", color: COLORS.oliveDark, lineHeight: 1.6 }}>
+          💵 {t.cashNote}
+        </div>
+      )}
+
+      {method === "cliq" && (
+        <div>
+          <p style={{ fontSize: "0.75rem", color: COLORS.textMuted, marginBottom: 10, lineHeight: 1.6 }}>⚡ {t.cliqNote}</p>
+          <label style={labelStyle}>{t.cliqAlias}</label>
+          <input
+            style={inputStyle}
+            placeholder={t.cliqAliasPlaceholder}
+            value={cliqAlias}
+            onChange={e => set("cliqAlias", e.target.value)}
+          />
+        </div>
+      )}
+
+      {method === "card" && (
+        <div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={labelStyle}>{t.cardName}</label>
+            <input style={inputStyle} placeholder="John Doe" value={cardName} onChange={e => set("cardName", e.target.value)} />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <label style={labelStyle}>{t.cardNumber}</label>
+            <input
+              style={{ ...inputStyle, fontFamily: "monospace", letterSpacing: "0.1em" }}
+              placeholder="1234 5678 9012 3456"
+              value={cardNumber}
+              onChange={e => handleCardNumber(e.target.value)}
+              inputMode="numeric"
+            />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div>
+              <label style={labelStyle}>{t.cardExpiry}</label>
+              <input
+                style={{ ...inputStyle, fontFamily: "monospace" }}
+                placeholder="MM/YY"
+                value={cardExpiry}
+                onChange={e => handleExpiry(e.target.value)}
+                inputMode="numeric"
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>{t.cardCvv}</label>
+              <input
+                style={{ ...inputStyle, fontFamily: "monospace" }}
+                placeholder="123"
+                value={cardCvv}
+                onChange={e => set("cardCvv", e.target.value.replace(/\D/g,"").slice(0,4))}
+                inputMode="numeric"
+                type="password"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Cart() {
   const { lang }   = useContext(LanguageContext);
   const { items, removeFromCart, updateQty, totalPrice, clearCart } = useCart();
@@ -210,7 +430,7 @@ export default function Cart() {
   const t          = TEXT[lang];
   const isRTL      = lang === "ar";
 
-  const trackingRef   = useRef(null);
+  const trackingRef               = useRef(null);
   const [lastOrderId, setLastOrderId]   = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -221,10 +441,26 @@ export default function Cart() {
       return saved ? JSON.parse(saved) : { phone: "", altPhone: "", address: "", deliveryDate: "", suitableTime: "Anytime" };
     } catch { return { phone: "", altPhone: "", address: "", deliveryDate: "", suitableTime: "Anytime" }; }
   });
+  useEffect(() => { localStorage.setItem(DELIVERY_KEY, JSON.stringify(deliveryInfo)); }, [deliveryInfo]);
 
+  const [paymentInfo, setPaymentInfo] = useState(() => {
+    try {
+      const saved = localStorage.getItem(PAYMENT_KEY);
+      const parsed = saved ? JSON.parse(saved) : {};
+      return {
+        method:     parsed.method     || "cash",
+        cliqAlias:  parsed.cliqAlias  || "",
+        cardNumber: "",
+        cardExpiry: "",
+        cardCvv:    "",
+        cardName:   parsed.cardName   || "",
+      };
+    } catch { return { method: "cash", cliqAlias: "", cardNumber: "", cardExpiry: "", cardCvv: "", cardName: "" }; }
+  });
   useEffect(() => {
-    localStorage.setItem(DELIVERY_KEY, JSON.stringify(deliveryInfo));
-  }, [deliveryInfo]);
+    const { method, cliqAlias, cardName } = paymentInfo;
+    localStorage.setItem(PAYMENT_KEY, JSON.stringify({ method, cliqAlias, cardName }));
+  }, [paymentInfo]);
 
   function updateField(field, value) {
     setDeliveryInfo(prev => ({ ...prev, [field]: value }));
@@ -236,6 +472,18 @@ export default function Cart() {
       alert(isRTL ? "يرجى تعبئة الحقول المطلوبة!" : "Please fill in all required fields.");
       return;
     }
+
+    if (paymentInfo.method === "cliq" && !paymentInfo.cliqAlias.trim()) {
+      alert(isRTL ? "يرجى إدخال رقم كليك." : "Please enter your CliQ alias.");
+      return;
+    }
+    if (paymentInfo.method === "card") {
+      if (!paymentInfo.cardName.trim() || !paymentInfo.cardNumber.trim() || !paymentInfo.cardExpiry.trim() || !paymentInfo.cardCvv.trim()) {
+        alert(isRTL ? "يرجى تعبئة جميع بيانات البطاقة." : "Please fill in all card details.");
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
       const payload = {
@@ -246,10 +494,11 @@ export default function Cart() {
           price: Number(i.version.price),
         })),
         status: "pending",
-        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime}`,
+        paymentMethod: paymentInfo.method,
+        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime} | Payment: ${paymentInfo.method}`,
       };
 
-      const res = await api.post("/orders", payload);
+      const res   = await api.post("/orders", payload);
       const newId = res.data._id;
 
       clearCart();
@@ -270,7 +519,6 @@ export default function Cart() {
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }} dir={isRTL ? "rtl" : "ltr"}>
 
-      {/* HERO */}
       <div style={{ background: `linear-gradient(rgba(30,50,20,0.82), rgba(30,50,20,0.82)), url(${hero}) center/cover no-repeat`, padding: "70px 0 50px", textAlign: "center" }}>
         <p style={{ fontSize: "0.7rem", letterSpacing: "3px", textTransform: "uppercase", color: COLORS.gold, fontWeight: 700, marginBottom: 10 }}>ZAYTONA</p>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 3rem)", color: "#fff", marginBottom: 14 }}>{t.title}</h1>
@@ -300,7 +548,7 @@ export default function Cart() {
 
             <div>
               {items.map(({ product, version, qty }) => {
-                const img  = getProductImg(product); // 
+                const img  = getProductImg(product);
                 const name = product.nameEn || product.name || "";
                 const farm = product.farmId?.nameEn || product.farm || "";
                 const size = product.sizeL || product.size || "";
@@ -349,7 +597,7 @@ export default function Cart() {
                   { label: t.deliveryDate, field: "deliveryDate", type: "date",     placeholder: "" },
                 ].map(({ label, field, type, placeholder }) => (
                   <div key={field} style={{ marginBottom: 10 }}>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, marginBottom: 4, color: COLORS.textDark }}>{label}</label>
+                    <label style={labelStyle}>{label}</label>
                     {type === "textarea" ? (
                       <textarea rows={2} style={inputStyle} placeholder={placeholder} value={deliveryInfo[field]} onChange={e => updateField(field, e.target.value)} />
                     ) : (
@@ -361,7 +609,7 @@ export default function Cart() {
                 ))}
 
                 <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, marginBottom: 4, color: COLORS.textDark }}>{t.suitableTime}</label>
+                  <label style={labelStyle}>{t.suitableTime}</label>
                   <select style={inputStyle} value={deliveryInfo.suitableTime} onChange={e => updateField("suitableTime", e.target.value)}>
                     <option value="Anytime">{t.anytime}</option>
                     <option value="Morning">{t.morning}</option>
@@ -371,6 +619,14 @@ export default function Cart() {
                 </div>
               </div>
 
+              <PaymentSection
+                t={t}
+                isRTL={isRTL}
+                paymentInfo={paymentInfo}
+                setPaymentInfo={setPaymentInfo}
+              />
+
+              {/* Order summary */}
               <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 22, marginBottom: 16 }}>
                 <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1rem", color: COLORS.oliveDark, marginBottom: 14, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
                   {t.orderSummary}
@@ -381,14 +637,29 @@ export default function Cart() {
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 10 }}>
                   <span>{t.shipping}</span><span style={{ color: COLORS.textDark, fontWeight: 500 }}>{t.free}</span>
                 </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 10 }}>
+                  <span>{isRTL ? "طريقة الدفع" : "Payment"}</span>
+                  <span style={{ color: COLORS.textDark, fontWeight: 500 }}>
+                    {PAYMENT_METHODS.find(m => m.id === paymentInfo.method)?.[isRTL ? "labelAr" : "labelEn"]}
+                  </span>
+                </div>
                 <div style={{ display: "flex", justifyContent: "space-between", borderTop: `1px solid ${COLORS.border}`, paddingTop: 12, marginTop: 4, fontWeight: 800, fontSize: "1rem", color: COLORS.oliveDark }}>
                   <span>{t.total}</span><span>{totalPrice.toFixed(2)} {t.jd}</span>
                 </div>
-                <button onClick={handleCheckout} disabled={isSubmitting} style={{
-                  width: "100%", marginTop: 18, background: COLORS.oliveDark, color: "#fff",
-                  border: "none", borderRadius: 8, padding: "12px", fontSize: "0.9rem",
-                  fontWeight: 700, cursor: isSubmitting ? "not-allowed" : "pointer", opacity: isSubmitting ? 0.7 : 1,
-                }}>
+
+                <button
+                  onClick={handleCheckout}
+                  disabled={isSubmitting}
+                  style={{
+                    width: "100%", marginTop: 18,
+                    background: COLORS.oliveDark, color: "#fff",
+                    border: "none", borderRadius: 8, padding: "12px",
+                    fontSize: "0.9rem", fontWeight: 700,
+                    cursor: isSubmitting ? "not-allowed" : "pointer",
+                    opacity: isSubmitting ? 0.7 : 1,
+                    transition: "opacity .15s",
+                  }}
+                >
                   {isSubmitting ? t.processing : `${t.checkout} →`}
                 </button>
               </div>
@@ -420,4 +691,9 @@ const inputStyle = {
   borderRadius: 6, border: `1px solid #e2d9c5`,
   outline: "none", background: "#faf8f3", color: "#1c2910",
   fontFamily: "inherit", boxSizing: "border-box",
+};
+
+const labelStyle = {
+  display: "block", fontSize: "0.75rem", fontWeight: 600,
+  marginBottom: 4, color: "#1c2910",
 };

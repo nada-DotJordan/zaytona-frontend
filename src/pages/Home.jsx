@@ -71,72 +71,252 @@ const TEXT = {
   },
 };
 
-const COLORS = {
-  oliveDark: "#2c3d1f",
-  oliveMid: "#3d5a27",
-  oliveLight: "#6b8f47",
-  cream: "#f5f0e8",
-  warmWhite: "#faf8f3",
-  gold: "#c8a84b",
-  border: "#e2d9c5",
-  textDark: "#1c2910",
-  textMuted: "#7a7a6e",
+const C = {
+  oliveDark:  "#546B41",
+  oliveMid:   "#3d5a27",
+  oliveLight: "#99AD7A",
+  cream:      "#DCCCAC",
+  warmWhite:  "#FFF8EC",
+  gold:       "#b89a4e",
+  border:     "#ddd3b8",
+  textDark:   "#1c2910",
+  textMuted:  "#7a7a6e",
 };
+
+const styles = {
+  /* Hero */
+  hero: {
+    position: "relative",
+    minHeight: "88vh",
+    display: "flex",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  heroBg: {
+    position: "absolute", inset: 0,
+    backgroundSize: "cover", backgroundPosition: "center",
+    filter: "brightness(0.45)",
+    zIndex: 0,
+  },
+  heroOverlay: {
+    position: "absolute", inset: 0,
+    background: "linear-gradient(135deg, rgba(44,61,31,0.55) 0%, rgba(20,30,10,0.3) 100%)",
+    zIndex: 1,
+  },
+  heroContent: { position: "relative", zIndex: 2 },
+
+  heroLabel: {
+    letterSpacing: "0.28em",
+    fontSize: 11,
+    fontWeight: 700,
+    color: C.gold,
+    textTransform: "uppercase",
+    marginBottom: 16,
+  },
+  heroH1: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: "clamp(2.6rem, 6vw, 4.4rem)",
+    fontWeight: 700,
+    lineHeight: 1.12,
+    color: "#fff",
+    marginBottom: 20,
+  },
+  heroAccent: { color: C.gold },
+  heroSub: {
+    fontSize: 16,
+    color: "rgba(255,255,255,0.72)",
+    maxWidth: 480,
+    lineHeight: 1.65,
+    marginBottom: 34,
+  },
+  heroCta: {
+    display: "inline-flex", alignItems: "center", gap: 10,
+    background: C.oliveDark,
+    border: `1.5px solid ${C.gold}`,
+    color: "#fff",
+    padding: "13px 30px",
+    borderRadius: 4,
+    fontSize: 14,
+    fontWeight: 600,
+    letterSpacing: "0.06em",
+    cursor: "pointer",
+    transition: "background .2s",
+    textDecoration: "none",
+  },
+
+  divider: {
+    width: 44, height: 2,
+    background: C.gold,
+    margin: "0 auto 28px",
+    borderRadius: 2,
+  },
+
+  how: {
+    padding: "88px 0",
+    background: C.warmWhite,
+    borderTop: `1px solid ${C.border}`,
+    borderBottom: `1px solid ${C.border}`,
+  },
+  howTitle: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)",
+    fontWeight: 700,
+    color: C.oliveDark,
+    marginBottom: 8,
+  },
+  howSub: { fontSize: 14, color: C.textMuted, marginBottom: 52 },
+
+  stepCard: {
+    background: "#fff",
+    border: `1px solid ${C.border}`,
+    borderRadius: 10,
+    padding: "32px 24px 28px",
+    height: "100%",
+    transition: "box-shadow .2s, transform .2s",
+    cursor: "default",
+  },
+  stepIcon: {
+    width: 52, height: 52,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: "50%",
+    background: `${C.oliveDark}14`,
+    marginBottom: 18,
+  },
+  stepNum: {
+    fontSize: 10, fontWeight: 700, letterSpacing: "0.2em",
+    color: C.gold, textTransform: "uppercase", marginBottom: 8,
+  },
+  stepLabel: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: 18, fontWeight: 700, color: C.oliveDark, marginBottom: 8,
+  },
+  stepDesc: { fontSize: 13.5, color: C.textMuted, lineHeight: 1.6 },
+
+  /* Products */
+  products: { padding: "88px 0", background: "#fff" },
+  sectionTitle: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: "clamp(1.7rem, 3.5vw, 2.4rem)",
+    fontWeight: 700,
+    color: C.oliveDark,
+    marginBottom: 8,
+  },
+  sectionSub: { fontSize: 14, color: C.textMuted, marginBottom: 48 },
+
+  farmCard: {
+    background: C.warmWhite,
+    border: `1px solid ${C.border}`,
+    borderRadius: 10,
+    overflow: "hidden",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    transition: "box-shadow .25s, transform .25s",
+    cursor: "pointer",
+  },
+  farmImgWrap: { position: "relative", paddingTop: "62%", overflow: "hidden" },
+  farmImg: {
+    position: "absolute", inset: 0,
+    width: "100%", height: "100%",
+    objectFit: "cover",
+    transition: "transform .4s",
+  },
+  farmBadge: {
+    position: "absolute", top: 10, right: 10,
+    background: C.oliveDark,
+    color: C.gold,
+    fontSize: 9, fontWeight: 700, letterSpacing: "0.18em",
+    padding: "4px 9px", borderRadius: 3, textTransform: "uppercase",
+  },
+  farmBody: { padding: "18px 18px 20px", flex: 1, display: "flex", flexDirection: "column" },
+  farmName: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: 17, fontWeight: 700, color: C.oliveDark, marginBottom: 6,
+  },
+  farmSizes: { fontSize: 12, color: C.textMuted, marginBottom: 14, flex: 1 },
+  farmBtn: {
+    display: "inline-flex", alignItems: "center", gap: 6,
+    background: "transparent",
+    border: `1.5px solid ${C.oliveDark}`,
+    color: C.oliveDark,
+    padding: "7px 16px",
+    borderRadius: 4,
+    fontSize: 12, fontWeight: 600,
+    cursor: "pointer",
+    transition: "background .2s, color .2s",
+    alignSelf: "flex-start",
+  },
+
+  viewMoreBtn: {
+    display: "inline-flex", alignItems: "center", gap: 8,
+    marginTop: 40,
+    background: C.oliveDark,
+    border: `1.5px solid ${C.oliveDark}`,
+    color: "#fff",
+    padding: "12px 28px",
+    borderRadius: 4,
+    fontSize: 13, fontWeight: 600, letterSpacing: "0.05em",
+    cursor: "pointer",
+    transition: "background .2s",
+  },
+};
+
+if (!document.getElementById("zay-gfont")) {
+  const l = document.createElement("link");
+  l.id = "zay-gfont";
+  l.rel = "stylesheet";
+  l.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap";
+  document.head.appendChild(l);
+}
 
 export default function Home() {
   const { lang } = useContext(LanguageContext);
   const navigate = useNavigate();
   const t = TEXT[lang];
   const { products, loading } = useProducts();
-  const { isAuthenticated } = useAuth(); 
+  const { isAuthenticated } = useAuth();
 
   const isRtl = lang === "ar";
   const steps = [t.step1, t.step2, t.step3, t.step4];
   const icons = [FaLeaf, FaFlask, FaBox, FaTruck];
-
   const displayProducts = products.slice(0, 4);
+
+  function getSizes(prod) {
+    if (prod.sizeL) return prod.sizeL;
+    return prod.versions?.map((v) => v.label).filter(Boolean).join(", ") || "—";
+  }
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"}>
 
-      {/* ── HERO ── */}
-      <section
-        style={{
-          background: `linear-gradient(rgba(30,50,20,0.75), rgba(30,50,20,0.75)), url(${HERO_IMAGE}) center/cover no-repeat`,
-          minHeight: "88vh",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6">
+      <section style={styles.hero}>
+        <div
+          style={{ ...styles.heroBg, backgroundImage: `url(${HERO_IMAGE})` }}
+        />
+        <div style={styles.heroOverlay} />
 
-              <p style={{ color: "#c8a84b" }}>{t.heroLabel}</p>
+        <div className="container" style={styles.heroContent}>
+          <div className="row">
+            <div className="col-lg-7 col-xl-6">
 
-              <h1 style={{ color: "#fff" }}>
-                {t.heroTitleLine1}
-                <br />
-                <span style={{ color: "#c8a84b" }}>{t.heroTitleLine2}</span>
+              <p style={styles.heroLabel}>{t.heroLabel}</p>
+
+              <h1 style={styles.heroH1}>
+                {t.heroTitleLine1}<br />
+                <span style={styles.heroAccent}>{t.heroTitleLine2}</span>
               </h1>
 
-              <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                {t.heroSubtitle}
-              </p>
+              <p style={styles.heroSub}>{t.heroSubtitle}</p>
 
               {!isAuthenticated && (
                 <button
+                  style={styles.heroCta}
                   onClick={() => navigate("/register")}
-                  style={{
-                    background: COLORS.oliveLight,
-                    border: "none",
-                    color: "#fff",
-                    padding: "13px 28px",
-                    borderRadius: 6,
-                    cursor: "pointer",
-                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = C.oliveLight)}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = C.oliveDark)}
                 >
                   {t.heroButton}
+                  <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
                 </button>
               )}
 
@@ -145,19 +325,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section style={{ padding: "80px 0", background: COLORS.warmWhite }}>
+      <section style={styles.how}>
         <div className="container text-center">
-          <h2>{t.howTitle}</h2>
+          <h2 style={styles.howTitle}>{t.howTitle}</h2>
+          <div style={styles.divider} />
+          <p style={styles.howSub}></p>
 
-          <div className="row mt-4">
+          <div className="row g-4 mt-1 justify-content-center">
             {steps.map((step, i) => {
               const Icon = icons[i];
               return (
-                <div key={i} className="col-md-3">
-                  <Icon size={30} color={COLORS.oliveMid} />
-                  <h5>{step.label}</h5>
-                  <p>{step.desc}</p>
+                <div key={i} className="col-sm-6 col-md-3">
+                  <div
+                    style={styles.stepCard}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = "0 8px 28px rgba(84,107,65,.13)";
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.transform = "none";
+                    }}
+                  >
+                    <div style={styles.stepIcon}>
+                      <Icon size={22} color={C.oliveDark} />
+                    </div>
+                    <p style={styles.stepNum}>0{i + 1}</p>
+                    <h5 style={styles.stepLabel}>{step.label}</h5>
+                    <p style={styles.stepDesc}>{step.desc}</p>
+                  </div>
                 </div>
               );
             })}
@@ -165,34 +361,82 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PRODUCTS ── */}
-      <section style={{ padding: "80px 0" }}>
+      <section style={styles.products}>
         <div className="container">
 
-          <h2>{t.productsTitle}</h2>
-          <p>{t.productsSubtitle}</p>
+          <h2 style={styles.sectionTitle}>{t.productsTitle}</h2>
+          <div style={{ ...styles.divider, margin: "0 0 14px" }} />
+          <p style={styles.sectionSub}>{t.productsSubtitle}</p>
 
-          {loading && <p>{t.loading}</p>}
+          {loading && (
+            <p style={{ color: C.textMuted }}>{t.loading}</p>
+          )}
 
-          <div className="row">
+          <div className="row g-4">
             {displayProducts.map((prod) => {
               const farmNameEn = prod.farmId?.nameEn || "";
-              const img = IMG_MAP[farmNameEn] || Baraka;
+              const img        = IMG_MAP[farmNameEn] || Baraka;
+              const displayName = lang === "en" ? (prod.nameEn || farmNameEn) : (prod.nameAr || farmNameEn);
 
               return (
-                <div key={prod._id} className="col-md-3">
-                  <div style={{ border: "1px solid #ddd", padding: 10 }}>
-                    <img src={img} alt="" style={{ width: "100%" }} />
-                    <h6>{lang === "en" ? prod.nameEn : prod.nameAr}</h6>
+                <div key={prod._id} className="col-sm-6 col-md-3">
+                  <div
+                    style={styles.farmCard}
+                    onClick={() => navigate("/Products")}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = "0 12px 36px rgba(84,107,65,.14)";
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.querySelector("img").style.transform = "scale(1.06)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.transform = "none";
+                      e.currentTarget.querySelector("img").style.transform = "scale(1)";
+                    }}
+                  >
+                    <div style={styles.farmImgWrap}>
+                      <img src={img} alt={displayName} style={styles.farmImg} />
+                      <span style={styles.farmBadge}>Verified Farm</span>
+                    </div>
+
+                    {/* Body */}
+                    <div style={styles.farmBody}>
+                      <h6 style={styles.farmName}>{displayName}</h6>
+                      <p style={styles.farmSizes}>
+                        <span style={{ color: C.gold, fontWeight: 600 }}>{t.sizesLabel} </span>
+                        {getSizes(prod)}
+                      </p>
+                      <button
+                        style={styles.farmBtn}
+                        onClick={(e) => { e.stopPropagation(); navigate("/Products"); }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = C.oliveDark;
+                          e.currentTarget.style.color = "#fff";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "transparent";
+                          e.currentTarget.style.color = C.oliveDark;
+                        }}
+                      >
+                        {t.viewProduct} →
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          <button onClick={() => navigate("/Products")}>
-            {t.viewMore}
-          </button>
+          <div className="text-center">
+            <button
+              style={styles.viewMoreBtn}
+              onClick={() => navigate("/Products")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = C.oliveLight)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = C.oliveDark)}
+            >
+              {t.viewMore} →
+            </button>
+          </div>
 
         </div>
       </section>
