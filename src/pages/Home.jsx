@@ -122,8 +122,8 @@ export default function Home() {
   const steps                 = [t.step1, t.step2, t.step3, t.step4];
   const icons                 = [FaLeaf, FaFlask, FaBox, FaTruck];
   const isRtl                 = lang === "ar";
-  const { isAuthenticated } = useAuth();
-  console.log("Auth:", isAuthenticated);
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
 
   const displayProducts = products.slice(0, 4);
 
