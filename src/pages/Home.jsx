@@ -123,6 +123,7 @@ export default function Home() {
   const icons                 = [FaLeaf, FaFlask, FaBox, FaTruck];
   const isRtl                 = lang === "ar";
   const { isAuthenticated } = useAuth();
+  console.log("Auth:", isAuthenticated);
 
   const displayProducts = products.slice(0, 4);
 
