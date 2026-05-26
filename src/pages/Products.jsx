@@ -117,20 +117,17 @@ function ProductCard({ prod, lang, t }) {
     : { top: 10, left: 10 };
 
   function handleAdd() {
-    if (!isAuthenticated) {
-      navigate("/register");
-      return;
-    }
+  addToCart(prod, selectedVersion);
+  setJustAdded(true);
+  setTimeout(() => setJustAdded(false), 1400);
+}
     addToCart(prod, selectedVersion);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1400);
   }
 
-  const btnLabel = !isAuthenticated
-    ? t.loginToAdd
-    : justAdded
-      ? t.added
-      : t.addToCart;
+  const btnLabel = justAdded ? t.added : t.addToCart;
+
 
   const btnBackground = !isAuthenticated
     ? COLORS.textMuted

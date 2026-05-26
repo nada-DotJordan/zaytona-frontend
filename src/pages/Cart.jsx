@@ -2,6 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { LanguageContext } from "../languages/LanguageContext";
+import { useAuth } from "../context/AuthContext";
 import api from "../api/api";
 import hero from "../assets/hero.jpg";
 
@@ -88,6 +89,7 @@ const TEXT = {
     cashNote: "You will pay in cash when the order is delivered to your door.",
     cancelOrder: "Cancel", cancelConfirm: "Cancel this order?", cancelError: "Could not cancel the order.",
     paymentLabel: "Payment",
+    signInToCheckout: "Sign in to place your order",
   },
   ar: {
     title: "سلة مشترياتك", subtitle: "راجع اختيارك من زيت الزيتون قبل إتمام الطلب.",
@@ -116,6 +118,7 @@ const TEXT = {
     cashNote: "ستدفع نقداً عند استلام الطلب على بابك.",
     cancelOrder: "إلغاء", cancelConfirm: "هل تريد إلغاء هذا الطلب؟", cancelError: "تعذّر إلغاء الطلب.",
     paymentLabel: "طريقة الدفع",
+    signInToCheckout: "سجّل دخولك لإتمام الطلب",
   },
 };
 
@@ -308,6 +311,7 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
 export default function Cart() {
   const { lang } = useContext(LanguageContext);
   const { items, removeFromCart, updateQty, totalPrice, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const t        = TEXT[lang];
   const isRTL    = lang === "ar";
@@ -342,6 +346,10 @@ export default function Cart() {
   const grandTotal = totalPrice + SHIPPING_FEE + TAX_FEE;
 
   async function handleCheckout() {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const { phone, address, deliveryDate } = deliveryInfo;
     if (!phone.trim() || !address.trim() || !deliveryDate) {
       alert(isRTL ? "يرجى تعبئة الحقول المطلوبة!" : "Please fill in all required fields.");
@@ -531,7 +539,8 @@ export default function Cart() {
                     onClick={handleCheckout}
                     disabled={isSubmitting}
                     style={{
-                      background: COLORS.oliveDark, color: "#fff", border: "none",
+                      background: isAuthenticated ? COLORS.oliveDark : COLORS.oliveMid,
+                      color: "#fff", border: "none",
                       borderRadius: 8, padding: "13px 44px",
                       fontSize: "0.95rem", fontWeight: 700,
                       cursor: isSubmitting ? "not-allowed" : "pointer",
@@ -540,7 +549,7 @@ export default function Cart() {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {isSubmitting ? t.processing : `${t.checkout} →`}
+                    {isSubmitting ? t.processing : isAuthenticated ? `${t.checkout} →` : `🔒 ${t.signInToCheckout}`}
                   </button>
                 </div>
               </div>
