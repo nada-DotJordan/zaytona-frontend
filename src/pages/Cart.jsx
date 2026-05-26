@@ -52,30 +52,9 @@ const STATUS_STYLE = {
 };
 
 const PAYMENT_METHODS = [
-  {
-    id:      "cash",
-    iconEn:  "💵",
-    labelEn: "Cash on Delivery",
-    labelAr: "الدفع عند الاستلام",
-    descEn:  "Pay when your order arrives",
-    descAr:  "ادفع عند وصول الطلب",
-  },
-  {
-    id:      "cliq",
-    iconEn:  "⚡",
-    labelEn: "CliQ",
-    labelAr: "كليك",
-    descEn:  "Instant bank transfer via CliQ",
-    descAr:  "تحويل فوري عبر كليك",
-  },
-  {
-    id:      "card",
-    iconEn:  "💳",
-    labelEn: "Credit / Debit Card",
-    labelAr: "بطاقة ائتمان / مدين",
-    descEn:  "Visa, Mastercard",
-    descAr:  "فيزا، ماستركارد",
-  },
+  { id: "cash", iconEn: "💵", labelEn: "Cash on Delivery", labelAr: "الدفع عند الاستلام", descEn: "Pay when your order arrives", descAr: "ادفع عند وصول الطلب" },
+  { id: "cliq", iconEn: "⚡", labelEn: "CliQ", labelAr: "كليك", descEn: "Instant bank transfer via CliQ", descAr: "تحويل فوري عبر كليك" },
+  { id: "card", iconEn: "💳", labelEn: "Credit / Debit Card", labelAr: "بطاقة ائتمان / مدين", descEn: "Visa, Mastercard", descAr: "فيزا، ماستركارد" },
 ];
 
 const TEXT = {
@@ -84,9 +63,9 @@ const TEXT = {
     empty: "Your cart is empty.", browseCta: "Browse Products",
     remove: "Remove", subtotal: "Subtotal", shipping: "Shipping",
     free: "Free", total: "Total", checkout: "Place Order", harvest: "Harvest",
+    tax: "Tax (16%)", shippingFee: "Shipping Fee",
     trackTitle: "Track Your Orders", trackSub: "View your recent orders and their status",
-    trackPlaceholder: "Search by Order ID...", trackBtn: "Search",
-    notFound: "No order found for", jd: "JOD",
+    trackPlaceholder: "Search by Order ID...", jd: "JOD",
     recentOrders: "Your Recent Orders",
     shippingTitle: "Delivery Information",
     phone: "Phone Number *", altPhone: "Alternative Phone",
@@ -98,30 +77,22 @@ const TEXT = {
     evening:   "Evening (04:00 PM – 07:00 PM)",
     processing: "Placing Order...",
     orderSuccess: "Order placed successfully! Scroll down to track it.",
-    autoSaved: "✓ Auto-saved",
-    orderSummary: "Order Summary",
-    noOrders: "No orders yet.",
+    autoSaved: "✓ Auto-saved", orderSummary: "Order Summary", noOrders: "No orders yet.",
     paymentTitle: "Payment Method",
-    cliqAlias:    "CliQ Alias / IBAN *",
-    cliqAliasPlaceholder: "e.g. yourname@bank",
-    cardNumber:   "Card Number *",
-    cardExpiry:   "Expiry Date *",
-    cardCvv:      "CVV *",
-    cardName:     "Name on Card *",
-    cliqNote:     "Enter your CliQ alias to confirm your transfer.",
-    cashNote:     "You will pay in cash when the order is delivered to your door.",
-    cancelOrder:  "Cancel",
-    cancelConfirm: "Cancel this order?",
-    cancelError:  "Could not cancel the order.",
+    cliqAlias: "CliQ Alias / IBAN *", cliqAliasPlaceholder: "e.g. yourname@bank",
+    cardNumber: "Card Number *", cardExpiry: "Expiry Date *", cardCvv: "CVV *", cardName: "Name on Card *",
+    cliqNote: "Enter your CliQ alias to confirm your transfer.",
+    cashNote: "You will pay in cash when the order is delivered to your door.",
+    cancelOrder: "Cancel", cancelConfirm: "Cancel this order?", cancelError: "Could not cancel the order.",
   },
   ar: {
     title: "سلة مشترياتك", subtitle: "راجع اختيارك من زيت الزيتون قبل إتمام الطلب.",
     empty: "سلتك فارغة.", browseCta: "تصفح المنتجات",
     remove: "حذف", subtotal: "المجموع الفرعي", shipping: "الشحن",
     free: "مجاني", total: "الإجمالي", checkout: "تأكيد الطلب", harvest: "موسم",
+    tax: "الضريبة (16%)", shippingFee: "رسوم التوصيل",
     trackTitle: "تتبع طلباتك", trackSub: "اعرض طلباتك الأخيرة وحالتها",
-    trackPlaceholder: "ابحث برقم الطلب...", trackBtn: "بحث",
-    notFound: "لم يُعثر على طلب بالرقم", jd: "دينار",
+    trackPlaceholder: "ابحث برقم الطلب...", jd: "دينار",
     recentOrders: "طلباتك الأخيرة",
     shippingTitle: "معلومات التوصيل",
     phone: "رقم الهاتف *", altPhone: "رقم بديل",
@@ -133,26 +104,20 @@ const TEXT = {
     evening:   "المساء (04:00 – 07:00)",
     processing: "جاري إرسال الطلب...",
     orderSuccess: "تم إرسال طلبك بنجاح! انتقل للأسفل لتتبعه.",
-    autoSaved: "✓ يتم الحفظ تلقائياً",
-    orderSummary: "ملخص الطلب",
-    noOrders: "لا توجد طلبات بعد.",
+    autoSaved: "✓ يتم الحفظ تلقائياً", orderSummary: "ملخص الطلب", noOrders: "لا توجد طلبات بعد.",
     paymentTitle: "طريقة الدفع",
-    cliqAlias:    "رقم كليك / IBAN *",
-    cliqAliasPlaceholder: "مثال: yourname@bank",
-    cardNumber:   "رقم البطاقة *",
-    cardExpiry:   "تاريخ الانتهاء *",
-    cardCvv:      "CVV *",
-    cardName:     "الاسم على البطاقة *",
-    cliqNote:     "أدخل رقم كليك الخاص بك لتأكيد التحويل.",
-    cashNote:     "ستدفع نقداً عند استلام الطلب على بابك.",
-    cancelOrder:  "إلغاء",
-    cancelConfirm: "هل تريد إلغاء هذا الطلب؟",
-    cancelError:  "تعذّر إلغاء الطلب.",
+    cliqAlias: "رقم كليك / IBAN *", cliqAliasPlaceholder: "مثال: yourname@bank",
+    cardNumber: "رقم البطاقة *", cardExpiry: "تاريخ الانتهاء *", cardCvv: "CVV *", cardName: "الاسم على البطاقة *",
+    cliqNote: "أدخل رقم كليك الخاص بك لتأكيد التحويل.",
+    cashNote: "ستدفع نقداً عند استلام الطلب على بابك.",
+    cancelOrder: "إلغاء", cancelConfirm: "هل تريد إلغاء هذا الطلب؟", cancelError: "تعذّر إلغاء الطلب.",
   },
 };
 
-const DELIVERY_KEY = "zaytona_delivery_info";
-const PAYMENT_KEY  = "zaytona_payment_info";
+const DELIVERY_KEY  = "zaytona_delivery_info";
+const PAYMENT_KEY   = "zaytona_payment_info";
+const SHIPPING_FEE  = 3.00;
+const TAX_FEE       = 2.60;
 
 function StatusPill({ status }) {
   const s = STATUS_STYLE[status?.toLowerCase()] || { bg: "#fdf6b2", color: "#9f580a", label: status };
@@ -164,10 +129,10 @@ function StatusPill({ status }) {
 }
 
 function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
-  const [orders, setOrders]   = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery]     = useState("");
-  const [cancelling, setCancelling] = useState(null); // orderId being cancelled
+  const [orders, setOrders]         = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [query, setQuery]           = useState("");
+  const [cancelling, setCancelling] = useState(null);
 
   function fetchOrders() {
     setLoading(true);
@@ -203,22 +168,13 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
           <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem" }}>{t.trackSub}</div>
         </div>
       </div>
-
       <div style={{ padding: 20 }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder={t.trackPlaceholder}
-            style={{ flex: 1, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "9px 14px", fontSize: "0.85rem", outline: "none", color: COLORS.textDark, background: COLORS.warmWhite }}
-          />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder={t.trackPlaceholder}
+            style={{ flex: 1, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "9px 14px", fontSize: "0.85rem", outline: "none", color: COLORS.textDark, background: COLORS.warmWhite }} />
           <button onClick={fetchOrders} style={{ background: COLORS.oliveMid, color: "#fff", border: "none", borderRadius: 8, padding: "9px 20px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>↻</button>
         </div>
-
-        <div style={{ fontSize: "0.72rem", fontWeight: 700, color: COLORS.textMuted, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 10 }}>
-          {t.recentOrders}
-        </div>
-
+        <div style={{ fontSize: "0.72rem", fontWeight: 700, color: COLORS.textMuted, letterSpacing: "1px", textTransform: "uppercase", marginBottom: 10 }}>{t.recentOrders}</div>
         {loading ? (
           <p style={{ color: COLORS.textMuted, fontSize: "0.82rem", textAlign: "center", padding: 20 }}>Loading...</p>
         ) : filtered.length === 0 ? (
@@ -235,11 +191,11 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
               </thead>
               <tbody>
                 {filtered.map(order => {
-                  const isNew      = order._id === highlightId;
-                  const isPending  = order.status?.toLowerCase() === "pending";
+                  const isNew        = order._id === highlightId;
+                  const isPending    = order.status?.toLowerCase() === "pending";
                   const isCancelling = cancelling === order._id;
-                  const itemCount  = order.items?.reduce((s, i) => s + i.qty, 0) || 0;
-                  const total      = order.items?.reduce((s, i) => s + i.price * i.qty, 0) || 0;
+                  const itemCount    = order.items?.reduce((s, i) => s + i.qty, 0) || 0;
+                  const total        = order.items?.reduce((s, i) => s + i.price * i.qty, 0) || 0;
                   return (
                     <tr key={order._id} style={{ borderBottom: `1px solid ${COLORS.border}`, background: isNew ? "#f0fdf4" : "transparent", transition: "background 0.3s" }}>
                       <td style={{ padding: "10px 10px", fontWeight: 700, color: COLORS.oliveDark, fontFamily: "monospace" }}>
@@ -248,28 +204,11 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
                       </td>
                       <td style={{ padding: "10px 10px", color: COLORS.textMuted }}>{itemCount} {isRTL ? "منتج" : "item(s)"}</td>
                       <td style={{ padding: "10px 10px", fontWeight: 700, color: COLORS.textDark }}>{total.toFixed(2)} {isRTL ? "د.أ" : "JOD"}</td>
-                      <td style={{ padding: "10px 10px" }}>
-                        <StatusPill status={order.status} />
-                      </td>
+                      <td style={{ padding: "10px 10px" }}><StatusPill status={order.status} /></td>
                       <td style={{ padding: "10px 10px" }}>
                         {isPending && (
-                          <button
-                            onClick={() => cancelOrder(order._id)}
-                            disabled={isCancelling}
-                            style={{
-                              background: "none",
-                              border: `1px solid #c0392b`,
-                              color: "#c0392b",
-                              borderRadius: 6,
-                              padding: "3px 10px",
-                              fontSize: "0.68rem",
-                              fontWeight: 700,
-                              cursor: isCancelling ? "not-allowed" : "pointer",
-                              opacity: isCancelling ? 0.5 : 1,
-                              whiteSpace: "nowrap",
-                              transition: "opacity .15s",
-                            }}
-                          >
+                          <button onClick={() => cancelOrder(order._id)} disabled={isCancelling}
+                            style={{ background: "none", border: "1px solid #c0392b", color: "#c0392b", borderRadius: 6, padding: "3px 10px", fontSize: "0.68rem", fontWeight: 700, cursor: isCancelling ? "not-allowed" : "pointer", opacity: isCancelling ? 0.5 : 1, whiteSpace: "nowrap", transition: "opacity .15s" }}>
                             {isCancelling ? "..." : t.cancelOrder}
                           </button>
                         )}
@@ -289,95 +228,52 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
 function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   const { method, cliqAlias, cardNumber, cardExpiry, cardCvv, cardName } = paymentInfo;
 
-  function set(field, value) {
-    setPaymentInfo(prev => ({ ...prev, [field]: value }));
-  }
+  function set(field, value) { setPaymentInfo(prev => ({ ...prev, [field]: value })); }
 
   function handleCardNumber(val) {
     const digits = val.replace(/\D/g, "").slice(0, 16);
-    const formatted = digits.match(/.{1,4}/g)?.join(" ") || digits;
-    set("cardNumber", formatted);
+    set("cardNumber", digits.match(/.{1,4}/g)?.join(" ") || digits);
   }
-
   function handleExpiry(val) {
     const digits = val.replace(/\D/g, "").slice(0, 4);
-    const formatted = digits.length > 2 ? `${digits.slice(0,2)}/${digits.slice(2)}` : digits;
-    set("cardExpiry", formatted);
+    set("cardExpiry", digits.length > 2 ? `${digits.slice(0,2)}/${digits.slice(2)}` : digits);
   }
 
   return (
-    <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, marginBottom: 16 }}>
-      <div style={{
-        fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem",
-        color: COLORS.oliveDark, marginBottom: 14,
-        borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8,
-      }}>
+    <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, boxSizing: "border-box" }}>
+      <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem", color: COLORS.oliveDark, marginBottom: 14, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8 }}>
         💳 {t.paymentTitle}
       </div>
-
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
         {PAYMENT_METHODS.map(pm => {
           const isSelected = method === pm.id;
           return (
-            <button
-              key={pm.id}
-              onClick={() => set("method", pm.id)}
-              style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "11px 14px",
-                borderRadius: 9,
-                border: isSelected
-                  ? `2px solid ${COLORS.oliveDark}`
-                  : `1.5px solid ${COLORS.border}`,
-                background: isSelected ? "#f4f8f0" : "#fff",
-                cursor: "pointer",
-                textAlign: isRTL ? "right" : "left",
-                transition: "border .15s, background .15s",
-                width: "100%",
-              }}
-            >
-              <span style={{
-                width: 16, height: 16, borderRadius: "50%", flexShrink: 0,
-                border: `2px solid ${isSelected ? COLORS.oliveDark : COLORS.border}`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {isSelected && (
-                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.oliveDark, display: "block" }} />
-                )}
+            <button key={pm.id} onClick={() => set("method", pm.id)}
+              style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 9, border: isSelected ? `2px solid ${COLORS.oliveDark}` : `1.5px solid ${COLORS.border}`, background: isSelected ? "#f4f8f0" : "#fff", cursor: "pointer", textAlign: isRTL ? "right" : "left", transition: "border .15s, background .15s", width: "100%" }}>
+              <span style={{ width: 16, height: 16, borderRadius: "50%", flexShrink: 0, border: `2px solid ${isSelected ? COLORS.oliveDark : COLORS.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {isSelected && <span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.oliveDark, display: "block" }} />}
               </span>
               <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>{pm.iconEn}</span>
               <span style={{ flex: 1 }}>
-                <span style={{ display: "block", fontWeight: 700, fontSize: "0.82rem", color: COLORS.textDark }}>
-                  {isRTL ? pm.labelAr : pm.labelEn}
-                </span>
-                <span style={{ fontSize: "0.72rem", color: COLORS.textMuted }}>
-                  {isRTL ? pm.descAr : pm.descEn}
-                </span>
+                <span style={{ display: "block", fontWeight: 700, fontSize: "0.82rem", color: COLORS.textDark }}>{isRTL ? pm.labelAr : pm.labelEn}</span>
+                <span style={{ fontSize: "0.72rem", color: COLORS.textMuted }}>{isRTL ? pm.descAr : pm.descEn}</span>
               </span>
             </button>
           );
         })}
       </div>
-
       {method === "cash" && (
         <div style={{ background: "#f4f8f0", border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "10px 14px", fontSize: "0.78rem", color: COLORS.oliveDark, lineHeight: 1.6 }}>
           💵 {t.cashNote}
         </div>
       )}
-
       {method === "cliq" && (
         <div>
           <p style={{ fontSize: "0.75rem", color: COLORS.textMuted, marginBottom: 10, lineHeight: 1.6 }}>⚡ {t.cliqNote}</p>
           <label style={labelStyle}>{t.cliqAlias}</label>
-          <input
-            style={inputStyle}
-            placeholder={t.cliqAliasPlaceholder}
-            value={cliqAlias}
-            onChange={e => set("cliqAlias", e.target.value)}
-          />
+          <input style={inputStyle} placeholder={t.cliqAliasPlaceholder} value={cliqAlias} onChange={e => set("cliqAlias", e.target.value)} />
         </div>
       )}
-
       {method === "card" && (
         <div>
           <div style={{ marginBottom: 10 }}>
@@ -386,35 +282,16 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
           </div>
           <div style={{ marginBottom: 10 }}>
             <label style={labelStyle}>{t.cardNumber}</label>
-            <input
-              style={{ ...inputStyle, fontFamily: "monospace", letterSpacing: "0.1em" }}
-              placeholder="1234 5678 9012 3456"
-              value={cardNumber}
-              onChange={e => handleCardNumber(e.target.value)}
-              inputMode="numeric"
-            />
+            <input style={{ ...inputStyle, fontFamily: "monospace", letterSpacing: "0.1em" }} placeholder="1234 5678 9012 3456" value={cardNumber} onChange={e => handleCardNumber(e.target.value)} inputMode="numeric" />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div>
               <label style={labelStyle}>{t.cardExpiry}</label>
-              <input
-                style={{ ...inputStyle, fontFamily: "monospace" }}
-                placeholder="MM/YY"
-                value={cardExpiry}
-                onChange={e => handleExpiry(e.target.value)}
-                inputMode="numeric"
-              />
+              <input style={{ ...inputStyle, fontFamily: "monospace" }} placeholder="MM/YY" value={cardExpiry} onChange={e => handleExpiry(e.target.value)} inputMode="numeric" />
             </div>
             <div>
               <label style={labelStyle}>{t.cardCvv}</label>
-              <input
-                style={{ ...inputStyle, fontFamily: "monospace" }}
-                placeholder="123"
-                value={cardCvv}
-                onChange={e => set("cardCvv", e.target.value.replace(/\D/g,"").slice(0,4))}
-                inputMode="numeric"
-                type="password"
-              />
+              <input style={{ ...inputStyle, fontFamily: "monospace" }} placeholder="123" value={cardCvv} onChange={e => set("cardCvv", e.target.value.replace(/\D/g,"").slice(0,4))} inputMode="numeric" type="password" />
             </div>
           </div>
         </div>
@@ -424,13 +301,13 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
 }
 
 export default function Cart() {
-  const { lang }   = useContext(LanguageContext);
+  const { lang } = useContext(LanguageContext);
   const { items, removeFromCart, updateQty, totalPrice, clearCart } = useCart();
-  const navigate   = useNavigate();
-  const t          = TEXT[lang];
-  const isRTL      = lang === "ar";
+  const navigate = useNavigate();
+  const t        = TEXT[lang];
+  const isRTL    = lang === "ar";
 
-  const trackingRef               = useRef(null);
+  const trackingRef                     = useRef(null);
   const [lastOrderId, setLastOrderId]   = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -445,16 +322,9 @@ export default function Cart() {
 
   const [paymentInfo, setPaymentInfo] = useState(() => {
     try {
-      const saved = localStorage.getItem(PAYMENT_KEY);
+      const saved  = localStorage.getItem(PAYMENT_KEY);
       const parsed = saved ? JSON.parse(saved) : {};
-      return {
-        method:     parsed.method     || "cash",
-        cliqAlias:  parsed.cliqAlias  || "",
-        cardNumber: "",
-        cardExpiry: "",
-        cardCvv:    "",
-        cardName:   parsed.cardName   || "",
-      };
+      return { method: parsed.method || "cash", cliqAlias: parsed.cliqAlias || "", cardNumber: "", cardExpiry: "", cardCvv: "", cardName: parsed.cardName || "" };
     } catch { return { method: "cash", cliqAlias: "", cardNumber: "", cardExpiry: "", cardCvv: "", cardName: "" }; }
   });
   useEffect(() => {
@@ -462,9 +332,7 @@ export default function Cart() {
     localStorage.setItem(PAYMENT_KEY, JSON.stringify({ method, cliqAlias, cardName }));
   }, [paymentInfo]);
 
-  function updateField(field, value) {
-    setDeliveryInfo(prev => ({ ...prev, [field]: value }));
-  }
+  function updateField(field, value) { setDeliveryInfo(prev => ({ ...prev, [field]: value })); }
 
   async function handleCheckout() {
     const { phone, address, deliveryDate } = deliveryInfo;
@@ -472,43 +340,27 @@ export default function Cart() {
       alert(isRTL ? "يرجى تعبئة الحقول المطلوبة!" : "Please fill in all required fields.");
       return;
     }
-
     if (paymentInfo.method === "cliq" && !paymentInfo.cliqAlias.trim()) {
       alert(isRTL ? "يرجى إدخال رقم كليك." : "Please enter your CliQ alias.");
       return;
     }
-    if (paymentInfo.method === "card") {
-      if (!paymentInfo.cardName.trim() || !paymentInfo.cardNumber.trim() || !paymentInfo.cardExpiry.trim() || !paymentInfo.cardCvv.trim()) {
-        alert(isRTL ? "يرجى تعبئة جميع بيانات البطاقة." : "Please fill in all card details.");
-        return;
-      }
+    if (paymentInfo.method === "card" && (!paymentInfo.cardName.trim() || !paymentInfo.cardNumber.trim() || !paymentInfo.cardExpiry.trim() || !paymentInfo.cardCvv.trim())) {
+      alert(isRTL ? "يرجى تعبئة جميع بيانات البطاقة." : "Please fill in all card details.");
+      return;
     }
-
     setIsSubmitting(true);
     try {
       const payload = {
-        items: items.map(i => ({
-          productId: i.product._id || i.product.id,
-          year:  Number(i.version.year),
-          qty:   Number(i.qty),
-          price: Number(i.version.price),
-        })),
+        items: items.map(i => ({ productId: i.product._id || i.product.id, year: Number(i.version.year), qty: Number(i.qty), price: Number(i.version.price) })),
         status: "pending",
         paymentMethod: paymentInfo.method,
-        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime} | Payment: ${paymentInfo.method}`,
+        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime} | Payment: ${paymentInfo.method} | Total: ${(totalPrice + SHIPPING_FEE + TAX_FEE).toFixed(2)} JOD`,
       };
-
-      const res   = await api.post("/orders", payload);
-      const newId = res.data._id;
-
+      const res = await api.post("/orders", payload);
       clearCart();
       setOrderSuccess(true);
-      setLastOrderId(newId);
-
-      setTimeout(() => {
-        trackingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 400);
-
+      setLastOrderId(res.data._id);
+      setTimeout(() => { trackingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 400);
     } catch (err) {
       alert(err.response?.data?.message || (isRTL ? "حدث خطأ." : "Something went wrong."));
     } finally {
@@ -519,13 +371,14 @@ export default function Cart() {
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }} dir={isRTL ? "rtl" : "ltr"}>
 
+      {/* HERO */}
       <div style={{ background: `linear-gradient(rgba(30,50,20,0.82), rgba(30,50,20,0.82)), url(${hero}) center/cover no-repeat`, padding: "70px 0 50px", textAlign: "center" }}>
         <p style={{ fontSize: "0.7rem", letterSpacing: "3px", textTransform: "uppercase", color: COLORS.gold, fontWeight: 700, marginBottom: 10 }}>ZAYTONA</p>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 3rem)", color: "#fff", marginBottom: 14 }}>{t.title}</h1>
         <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.9rem", maxWidth: 520, margin: "0 auto" }}>{t.subtitle}</p>
       </div>
 
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 20px 80px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 20px 80px" }}>
 
         {orderSuccess && (
           <div style={{ background: "#def7ec", border: "1px solid #057a55", borderRadius: 10, padding: "14px 20px", marginBottom: 24, fontSize: "0.88rem", color: "#057a55", fontWeight: 600 }}>
@@ -544,16 +397,16 @@ export default function Cart() {
         )}
 
         {items.length > 0 && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 28, alignItems: "start" }}>
-
-            <div>
+          <>
+            {/* ── ROW 1: Cart items ── */}
+            <div style={{ marginBottom: 24 }}>
               {items.map(({ product, version, qty }) => {
                 const img  = getProductImg(product);
                 const name = product.nameEn || product.name || "";
                 const farm = product.farmId?.nameEn || product.farm || "";
                 const size = product.sizeL || product.size || "";
                 return (
-                  <div key={`${product._id || product.id}-${version.year}`} style={{ display: "flex", gap: 14, background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 12, overflow: "hidden", marginBottom: 14 }}>
+                  <div key={`${product._id || product.id}-${version.year}`} style={{ display: "flex", gap: 14, background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 12, overflow: "hidden", marginBottom: 12 }}>
                     <img src={img} alt={name} style={{ width: 110, height: 110, objectFit: "cover", flexShrink: 0 }} />
                     <div style={{ flex: 1, padding: "12px 14px 12px 0", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                       <div>
@@ -582,14 +435,15 @@ export default function Cart() {
               })}
             </div>
 
-            <div style={{ position: "sticky", top: 20 }}>
+            {/* ── ROW 2: Delivery | Payment (equal columns) ── */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "start", marginBottom: 20 }}>
 
-              <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, marginBottom: 16 }}>
+              {/* Delivery */}
+              <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18 }}>
                 <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem", color: COLORS.oliveDark, marginBottom: 12, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span>📋 {t.shippingTitle}</span>
                   <span style={{ fontSize: "0.65rem", color: COLORS.oliveLight, fontWeight: 500 }}>{t.autoSaved}</span>
                 </div>
-
                 {[
                   { label: t.phone,        field: "phone",        type: "tel",      placeholder: "079XXXXXXXX" },
                   { label: t.altPhone,     field: "altPhone",     type: "tel",      placeholder: isRTL ? "اختياري" : "Optional" },
@@ -607,7 +461,6 @@ export default function Cart() {
                     )}
                   </div>
                 ))}
-
                 <div>
                   <label style={labelStyle}>{t.suitableTime}</label>
                   <select style={inputStyle} value={deliveryInfo.suitableTime} onChange={e => updateField("suitableTime", e.target.value)}>
@@ -619,56 +472,72 @@ export default function Cart() {
                 </div>
               </div>
 
-              <PaymentSection
-                t={t}
-                isRTL={isRTL}
-                paymentInfo={paymentInfo}
-                setPaymentInfo={setPaymentInfo}
-              />
+              {/* Payment */}
+              <PaymentSection t={t} isRTL={isRTL} paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
 
-              {/* Order summary */}
-              <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 22, marginBottom: 16 }}>
-                <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1rem", color: COLORS.oliveDark, marginBottom: 14, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
-                  {t.orderSummary}
+            </div>
+
+            {/* ── ROW 3: Order Summary — full width ── */}
+            <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "22px 28px" }}>
+              <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1rem", color: COLORS.oliveDark, marginBottom: 16, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
+                {t.orderSummary}
+              </div>
+
+              {/* Summary rows */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "10px 24px", marginBottom: 16 }}>
+                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
+                  <span style={{ display: "block", marginBottom: 2 }}>{t.subtotal}</span>
+                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{totalPrice.toFixed(2)} {t.jd}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 10 }}>
-                  <span>{t.subtotal}</span><span style={{ color: COLORS.textDark, fontWeight: 500 }}>{totalPrice.toFixed(2)} {t.jd}</span>
+                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
+                  <span style={{ display: "block", marginBottom: 2 }}>{t.shippingFee}</span>
+                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{SHIPPING_FEE.toFixed(2)} {t.jd}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 10 }}>
-                  <span>{t.shipping}</span><span style={{ color: COLORS.textDark, fontWeight: 500 }}>{t.free}</span>
+                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
+                  <span style={{ display: "block", marginBottom: 2 }}>{t.tax}</span>
+                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{TAX_FEE.toFixed(2)} {t.jd}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", color: COLORS.textMuted, marginBottom: 10 }}>
-                  <span>{isRTL ? "طريقة الدفع" : "Payment"}</span>
-                  <span style={{ color: COLORS.textDark, fontWeight: 500 }}>
+                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
+                  <span style={{ display: "block", marginBottom: 2 }}>{isRTL ? "طريقة الدفع" : "Payment"}</span>
+                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>
                     {PAYMENT_METHODS.find(m => m.id === paymentInfo.method)?.[isRTL ? "labelAr" : "labelEn"]}
                   </span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", borderTop: `1px solid ${COLORS.border}`, paddingTop: 12, marginTop: 4, fontWeight: 800, fontSize: "1rem", color: COLORS.oliveDark }}>
-                  <span>{t.total}</span><span>{totalPrice.toFixed(2)} {t.jd}</span>
+              </div>
+
+              {/* Divider + Total + Button */}
+              <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                  <span style={{ fontSize: "0.9rem", color: COLORS.textMuted, fontWeight: 600 }}>{t.total}</span>
+                  <span style={{ fontSize: "1.5rem", fontWeight: 800, color: COLORS.oliveDark }}>
+                    {(totalPrice + SHIPPING_FEE + TAX_FEE).toFixed(2)}
+                  </span>
+                  <span style={{ fontSize: "0.85rem", color: COLORS.oliveMid, fontWeight: 600 }}>{t.jd}</span>
                 </div>
 
-                <button
-                  onClick={handleCheckout}
-                  disabled={isSubmitting}
-                  style={{
-                    width: "100%", marginTop: 18,
-                    background: COLORS.oliveDark, color: "#fff",
-                    border: "none", borderRadius: 8, padding: "12px",
-                    fontSize: "0.9rem", fontWeight: 700,
-                    cursor: isSubmitting ? "not-allowed" : "pointer",
-                    opacity: isSubmitting ? 0.7 : 1,
-                    transition: "opacity .15s",
-                  }}
-                >
-                  {isSubmitting ? t.processing : `${t.checkout} →`}
-                </button>
-              </div>
-
-              <div style={{ background: COLORS.goldLight, border: `1px solid ${COLORS.gold}44`, borderRadius: 10, padding: "12px 16px", fontSize: "0.75rem", color: "#7a5c2e", lineHeight: 1.6 }}>
-                🫒 {isRTL ? "جميع الزيوت معصورة بالبرد وتُشحن خلال 48 ساعة." : "All oils are cold-pressed and shipped within 48 hours of your order."}
+                <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                  <div style={{ fontSize: "0.72rem", color: "#7a5c2e", background: COLORS.goldLight, border: `1px solid ${COLORS.gold}44`, borderRadius: 8, padding: "8px 14px", lineHeight: 1.5 }}>
+                    🫒 {isRTL ? "معصور بالبرد · شحن خلال 48 ساعة" : "Cold-pressed · Ships within 48 hours"}
+                  </div>
+                  <button
+                    onClick={handleCheckout}
+                    disabled={isSubmitting}
+                    style={{
+                      background: COLORS.oliveDark, color: "#fff",
+                      border: "none", borderRadius: 8, padding: "13px 40px",
+                      fontSize: "0.95rem", fontWeight: 700,
+                      cursor: isSubmitting ? "not-allowed" : "pointer",
+                      opacity: isSubmitting ? 0.7 : 1,
+                      transition: "opacity .15s",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {isSubmitting ? t.processing : `${t.checkout} →`}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         <div style={{ marginTop: 48 }}>
@@ -681,14 +550,14 @@ export default function Cart() {
 
 const qtyBtn = {
   width: 28, height: 28, borderRadius: "50%",
-  border: `1px solid #e2d9c5`, background: "#fff",
+  border: "1px solid #e2d9c5", background: "#fff",
   color: "#2c3d1f", fontWeight: 700, fontSize: "1rem",
   cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
 };
 
 const inputStyle = {
   width: "100%", padding: "7px 10px", fontSize: "0.82rem",
-  borderRadius: 6, border: `1px solid #e2d9c5`,
+  borderRadius: 6, border: "1px solid #e2d9c5",
   outline: "none", background: "#faf8f3", color: "#1c2910",
   fontFamily: "inherit", boxSizing: "border-box",
 };
