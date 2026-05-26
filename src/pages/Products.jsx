@@ -48,6 +48,7 @@ const TEXT = {
     jd:            "JD",
     addToCart:     "Add to Cart",
     added:         "✓ Added!",
+    loginToAdd:    "Sign in to Add",
     filterAll:     "All Farms",
     loading:       "Loading products...",
     noResults:     "No products found.",
@@ -62,6 +63,7 @@ const TEXT = {
     jd:            "دينار",
     addToCart:     "إضافة للسلة",
     added:         "✓ تمت الإضافة!",
+    loginToAdd:    "سجّل دخولك للإضافة",
     filterAll:     "كل المزارع",
     loading:       "جارٍ التحميل...",
     noResults:     "لا توجد منتجات.",
@@ -95,7 +97,7 @@ function badgeColor(badge) {
 }
 
 function ProductCard({ prod, lang, t }) {
-  const { addToCart }       = useCart();
+  const { addToCart }      = useCart();
   const { isAuthenticated } = useAuth();
   const navigate            = useNavigate();
 
@@ -113,18 +115,27 @@ function ProductCard({ prod, lang, t }) {
     ? { top: 10, right: 10 }
     : { top: 10, left: 10 };
 
-  // ✅ FIX: All users can add to cart — auth gate is at checkout only
   function handleAdd() {
+  addToCart(prod, selectedVersion);
+  setJustAdded(true);
+  setTimeout(() => setJustAdded(false), 1400);
+}
     addToCart(prod, selectedVersion);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1400);
   }
 
-  const btnLabel = justAdded ? t.added : t.addToCart;
+  const btnLabel = !isAuthenticated
+    ? t.loginToAdd
+    : justAdded
+      ? t.added
+      : t.addToCart;
 
-  const btnBackground = justAdded
-    ? COLORS.oliveLight
-    : COLORS.oliveDark;
+  const btnBackground = !isAuthenticated
+    ? COLORS.textMuted
+    : justAdded
+      ? COLORS.oliveLight
+      : COLORS.oliveDark;
 
   return (
     <div
