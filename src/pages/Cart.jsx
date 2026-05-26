@@ -125,7 +125,6 @@ const TEXT = {
 const DELIVERY_KEY = "zaytona_delivery_info";
 const PAYMENT_KEY  = "zaytona_payment_info";
 
-/* ── StatusPill ── */
 function StatusPill({ status }) {
   const s = STATUS_STYLE[status?.toLowerCase()] || { bg: "#fdf6b2", color: "#9f580a", label: status };
   return (
@@ -135,7 +134,6 @@ function StatusPill({ status }) {
   );
 }
 
-/* ── TrackingSection ── */
 function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   const [orders, setOrders]         = useState([]);
   const [loading, setLoading]       = useState(true);
@@ -233,7 +231,6 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   );
 }
 
-/* ── PaymentSection ── */
 function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   const { method, cliqAlias, cardNumber, cardExpiry, cardCvv, cardName } = paymentInfo;
   function set(field, value) { setPaymentInfo(prev => ({ ...prev, [field]: value })); }
@@ -307,7 +304,6 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   );
 }
 
-/* ══ Main Cart ══ */
 export default function Cart() {
   const { lang } = useContext(LanguageContext);
   const { items, removeFromCart, updateQty, totalPrice, clearCart } = useCart();
@@ -386,7 +382,6 @@ export default function Cart() {
   return (
     <div style={{ background: COLORS.warmWhite, minHeight: "100vh" }} dir={isRTL ? "rtl" : "ltr"}>
 
-      {/* HERO */}
       <div style={{ background: `linear-gradient(rgba(30,50,20,0.82), rgba(30,50,20,0.82)), url(${hero}) center/cover no-repeat`, padding: "70px 0 50px", textAlign: "center" }}>
         <p style={{ fontSize: "0.7rem", letterSpacing: "3px", textTransform: "uppercase", color: COLORS.gold, fontWeight: 700, marginBottom: 10 }}>ZAYTONA</p>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 3rem)", color: "#fff", marginBottom: 14 }}>{t.title}</h1>
@@ -395,14 +390,12 @@ export default function Cart() {
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 20px 80px" }}>
 
-        {/* Success */}
         {orderSuccess && (
           <div style={{ background: "#def7ec", border: "1px solid #057a55", borderRadius: 10, padding: "14px 20px", marginBottom: 24, fontSize: "0.88rem", color: "#057a55", fontWeight: 600 }}>
             ✅ {t.orderSuccess}
           </div>
         )}
 
-        {/* Empty */}
         {items.length === 0 && !orderSuccess && (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ fontSize: "4rem", marginBottom: 16 }}>🫙</div>
@@ -415,7 +408,6 @@ export default function Cart() {
 
         {items.length > 0 && (
           <>
-            {/* ── ROW 1: Cart items (full width) ── */}
             <div style={{ marginBottom: 24 }}>
               {items.map(({ product, version, qty }) => {
                 const img  = getProductImg(product);
@@ -452,10 +444,8 @@ export default function Cart() {
               })}
             </div>
 
-            {/* ── ROW 2: Delivery | Payment جنب بعض (50/50) ── */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
 
-              {/* Delivery */}
               <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18 }}>
                 <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem", color: COLORS.oliveDark, marginBottom: 12, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span>📋 {t.shippingTitle}</span>
@@ -489,19 +479,16 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* Payment */}
               <PaymentSection t={t} isRTL={isRTL} paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
 
             </div>
 
-            {/* ── ROW 3: Order Summary — نفس عرض الاثنين فوق ── */}
             <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "20px 24px" }}>
 
               <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.95rem", color: COLORS.oliveDark, marginBottom: 16, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
                 {t.orderSummary}
               </div>
 
-              {/* الأرقام في صف واحد */}
               <div style={{ display: "flex", gap: 0, marginBottom: 16, background: COLORS.warmWhite, borderRadius: 10, border: `1px solid ${COLORS.border}`, overflow: "hidden" }}>
                 {[
                   { label: t.subtotal,    value: `${totalPrice.toFixed(2)} ${t.jd}`,      icon: "🛒" },
@@ -521,7 +508,6 @@ export default function Cart() {
                 ))}
               </div>
 
-              {/* Total + Button */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                   <span style={{ fontSize: "0.88rem", color: COLORS.textMuted, fontWeight: 600 }}>{t.total}</span>

@@ -1,4 +1,3 @@
-// src/pages/Products.jsx
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LanguageContext } from "../languages/LanguageContext";
