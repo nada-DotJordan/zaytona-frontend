@@ -343,7 +343,7 @@ export default function Cart() {
 
   async function handleCheckout() {
     if (!isAuthenticated) {
-      navigate("/login");
+    navigate("/login", { state: { from: "/cart" } });
       return;
     }
     const { phone, address, deliveryDate } = deliveryInfo;
