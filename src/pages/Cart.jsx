@@ -52,18 +52,21 @@ const STATUS_STYLE = {
 };
 
 const PAYMENT_METHODS = [
-  { id: "cash", iconEn: "💵", labelEn: "Cash on Delivery", labelAr: "الدفع عند الاستلام", descEn: "Pay when your order arrives", descAr: "ادفع عند وصول الطلب" },
-  { id: "cliq", iconEn: "⚡", labelEn: "CliQ", labelAr: "كليك", descEn: "Instant bank transfer via CliQ", descAr: "تحويل فوري عبر كليك" },
-  { id: "card", iconEn: "💳", labelEn: "Credit / Debit Card", labelAr: "بطاقة ائتمان / مدين", descEn: "Visa, Mastercard", descAr: "فيزا، ماستركارد" },
+  { id: "cash", iconEn: "💵", labelEn: "Cash on Delivery", labelAr: "الدفع عند الاستلام", descEn: "Pay when your order arrives",       descAr: "ادفع عند وصول الطلب"       },
+  { id: "cliq", iconEn: "⚡", labelEn: "CliQ",             labelAr: "كليك",               descEn: "Instant bank transfer via CliQ",   descAr: "تحويل فوري عبر كليك"       },
+  { id: "card", iconEn: "💳", labelEn: "Credit / Debit Card", labelAr: "بطاقة ائتمان / مدين", descEn: "Visa, Mastercard",            descAr: "فيزا، ماستركارد"            },
 ];
+
+const SHIPPING_FEE = 3.00;
+const TAX_FEE      = 2.60;
 
 const TEXT = {
   en: {
     title: "Your Cart", subtitle: "Review your olive oil selection before checkout.",
     empty: "Your cart is empty.", browseCta: "Browse Products",
-    remove: "Remove", subtotal: "Subtotal", shipping: "Shipping",
-    free: "Free", total: "Total", checkout: "Place Order", harvest: "Harvest",
-    tax: "Tax (16%)", shippingFee: "Shipping Fee",
+    remove: "Remove", subtotal: "Subtotal",
+    shippingFee: "Delivery Fee", tax: "Tax",
+    total: "Total", checkout: "Place Order", harvest: "Harvest",
     trackTitle: "Track Your Orders", trackSub: "View your recent orders and their status",
     trackPlaceholder: "Search by Order ID...", jd: "JOD",
     recentOrders: "Your Recent Orders",
@@ -84,13 +87,14 @@ const TEXT = {
     cliqNote: "Enter your CliQ alias to confirm your transfer.",
     cashNote: "You will pay in cash when the order is delivered to your door.",
     cancelOrder: "Cancel", cancelConfirm: "Cancel this order?", cancelError: "Could not cancel the order.",
+    paymentLabel: "Payment",
   },
   ar: {
     title: "سلة مشترياتك", subtitle: "راجع اختيارك من زيت الزيتون قبل إتمام الطلب.",
     empty: "سلتك فارغة.", browseCta: "تصفح المنتجات",
-    remove: "حذف", subtotal: "المجموع الفرعي", shipping: "الشحن",
-    free: "مجاني", total: "الإجمالي", checkout: "تأكيد الطلب", harvest: "موسم",
-    tax: "الضريبة (16%)", shippingFee: "رسوم التوصيل",
+    remove: "حذف", subtotal: "المجموع الفرعي",
+    shippingFee: "رسوم التوصيل", tax: "الضريبة",
+    total: "الإجمالي", checkout: "تأكيد الطلب", harvest: "موسم",
     trackTitle: "تتبع طلباتك", trackSub: "اعرض طلباتك الأخيرة وحالتها",
     trackPlaceholder: "ابحث برقم الطلب...", jd: "دينار",
     recentOrders: "طلباتك الأخيرة",
@@ -111,14 +115,14 @@ const TEXT = {
     cliqNote: "أدخل رقم كليك الخاص بك لتأكيد التحويل.",
     cashNote: "ستدفع نقداً عند استلام الطلب على بابك.",
     cancelOrder: "إلغاء", cancelConfirm: "هل تريد إلغاء هذا الطلب؟", cancelError: "تعذّر إلغاء الطلب.",
+    paymentLabel: "طريقة الدفع",
   },
 };
 
-const DELIVERY_KEY  = "zaytona_delivery_info";
-const PAYMENT_KEY   = "zaytona_payment_info";
-const SHIPPING_FEE  = 3.00;
-const TAX_FEE       = 2.60;
+const DELIVERY_KEY = "zaytona_delivery_info";
+const PAYMENT_KEY  = "zaytona_payment_info";
 
+/* ── StatusPill ── */
 function StatusPill({ status }) {
   const s = STATUS_STYLE[status?.toLowerCase()] || { bg: "#fdf6b2", color: "#9f580a", label: status };
   return (
@@ -128,6 +132,7 @@ function StatusPill({ status }) {
   );
 }
 
+/* ── TrackingSection ── */
 function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   const [orders, setOrders]         = useState([]);
   const [loading, setLoading]       = useState(true);
@@ -208,7 +213,7 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
                       <td style={{ padding: "10px 10px" }}>
                         {isPending && (
                           <button onClick={() => cancelOrder(order._id)} disabled={isCancelling}
-                            style={{ background: "none", border: "1px solid #c0392b", color: "#c0392b", borderRadius: 6, padding: "3px 10px", fontSize: "0.68rem", fontWeight: 700, cursor: isCancelling ? "not-allowed" : "pointer", opacity: isCancelling ? 0.5 : 1, whiteSpace: "nowrap", transition: "opacity .15s" }}>
+                            style={{ background: "none", border: "1px solid #c0392b", color: "#c0392b", borderRadius: 6, padding: "3px 10px", fontSize: "0.68rem", fontWeight: 700, cursor: isCancelling ? "not-allowed" : "pointer", opacity: isCancelling ? 0.5 : 1, whiteSpace: "nowrap" }}>
                             {isCancelling ? "..." : t.cancelOrder}
                           </button>
                         )}
@@ -225,11 +230,10 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
   );
 }
 
+/* ── PaymentSection ── */
 function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   const { method, cliqAlias, cardNumber, cardExpiry, cardCvv, cardName } = paymentInfo;
-
   function set(field, value) { setPaymentInfo(prev => ({ ...prev, [field]: value })); }
-
   function handleCardNumber(val) {
     const digits = val.replace(/\D/g, "").slice(0, 16);
     set("cardNumber", digits.match(/.{1,4}/g)?.join(" ") || digits);
@@ -240,7 +244,7 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   }
 
   return (
-    <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, boxSizing: "border-box" }}>
+    <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18, height: "100%", boxSizing: "border-box" }}>
       <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.9rem", color: COLORS.oliveDark, marginBottom: 14, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 8 }}>
         💳 {t.paymentTitle}
       </div>
@@ -300,6 +304,7 @@ function PaymentSection({ t, isRTL, paymentInfo, setPaymentInfo }) {
   );
 }
 
+/* ══ Main Cart ══ */
 export default function Cart() {
   const { lang } = useContext(LanguageContext);
   const { items, removeFromCart, updateQty, totalPrice, clearCart } = useCart();
@@ -334,6 +339,8 @@ export default function Cart() {
 
   function updateField(field, value) { setDeliveryInfo(prev => ({ ...prev, [field]: value })); }
 
+  const grandTotal = totalPrice + SHIPPING_FEE + TAX_FEE;
+
   async function handleCheckout() {
     const { phone, address, deliveryDate } = deliveryInfo;
     if (!phone.trim() || !address.trim() || !deliveryDate) {
@@ -354,7 +361,7 @@ export default function Cart() {
         items: items.map(i => ({ productId: i.product._id || i.product.id, year: Number(i.version.year), qty: Number(i.qty), price: Number(i.version.price) })),
         status: "pending",
         paymentMethod: paymentInfo.method,
-        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime} | Payment: ${paymentInfo.method} | Total: ${(totalPrice + SHIPPING_FEE + TAX_FEE).toFixed(2)} JOD`,
+        deliveryStatus: `Address: ${address} | Phone: ${phone} | AltPhone: ${deliveryInfo.altPhone || "N/A"} | Date: ${deliveryDate} | Time: ${deliveryInfo.suitableTime} | Payment: ${paymentInfo.method} | Total: ${grandTotal.toFixed(2)} JOD`,
       };
       const res = await api.post("/orders", payload);
       clearCart();
@@ -380,12 +387,14 @@ export default function Cart() {
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 20px 80px" }}>
 
+        {/* Success */}
         {orderSuccess && (
           <div style={{ background: "#def7ec", border: "1px solid #057a55", borderRadius: 10, padding: "14px 20px", marginBottom: 24, fontSize: "0.88rem", color: "#057a55", fontWeight: 600 }}>
             ✅ {t.orderSuccess}
           </div>
         )}
 
+        {/* Empty */}
         {items.length === 0 && !orderSuccess && (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ fontSize: "4rem", marginBottom: 16 }}>🫙</div>
@@ -398,7 +407,7 @@ export default function Cart() {
 
         {items.length > 0 && (
           <>
-            {/* ── ROW 1: Cart items ── */}
+            {/* ── ROW 1: Cart items (full width) ── */}
             <div style={{ marginBottom: 24 }}>
               {items.map(({ product, version, qty }) => {
                 const img  = getProductImg(product);
@@ -435,8 +444,8 @@ export default function Cart() {
               })}
             </div>
 
-            {/* ── ROW 2: Delivery | Payment (equal columns) ── */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "start", marginBottom: 20 }}>
+            {/* ── ROW 2: Delivery | Payment جنب بعض (50/50) ── */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
 
               {/* Delivery */}
               <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: 18 }}>
@@ -477,54 +486,53 @@ export default function Cart() {
 
             </div>
 
-            {/* ── ROW 3: Order Summary — full width ── */}
-            <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "22px 28px" }}>
-              <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1rem", color: COLORS.oliveDark, marginBottom: 16, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
+            {/* ── ROW 3: Order Summary — نفس عرض الاثنين فوق ── */}
+            <div style={{ background: "#fff", border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "20px 24px" }}>
+
+              <div style={{ fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "0.95rem", color: COLORS.oliveDark, marginBottom: 16, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 10 }}>
                 {t.orderSummary}
               </div>
 
-              {/* Summary rows */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "10px 24px", marginBottom: 16 }}>
-                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
-                  <span style={{ display: "block", marginBottom: 2 }}>{t.subtotal}</span>
-                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{totalPrice.toFixed(2)} {t.jd}</span>
-                </div>
-                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
-                  <span style={{ display: "block", marginBottom: 2 }}>{t.shippingFee}</span>
-                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{SHIPPING_FEE.toFixed(2)} {t.jd}</span>
-                </div>
-                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
-                  <span style={{ display: "block", marginBottom: 2 }}>{t.tax}</span>
-                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>{TAX_FEE.toFixed(2)} {t.jd}</span>
-                </div>
-                <div style={{ fontSize: "0.82rem", color: COLORS.textMuted }}>
-                  <span style={{ display: "block", marginBottom: 2 }}>{isRTL ? "طريقة الدفع" : "Payment"}</span>
-                  <span style={{ color: COLORS.textDark, fontWeight: 600 }}>
-                    {PAYMENT_METHODS.find(m => m.id === paymentInfo.method)?.[isRTL ? "labelAr" : "labelEn"]}
-                  </span>
-                </div>
+              {/* الأرقام في صف واحد */}
+              <div style={{ display: "flex", gap: 0, marginBottom: 16, background: COLORS.warmWhite, borderRadius: 10, border: `1px solid ${COLORS.border}`, overflow: "hidden" }}>
+                {[
+                  { label: t.subtotal,    value: `${totalPrice.toFixed(2)} ${t.jd}`,      icon: "🛒" },
+                  { label: t.shippingFee, value: `${SHIPPING_FEE.toFixed(2)} ${t.jd}`,    icon: "🚚" },
+                  { label: t.tax,         value: `${TAX_FEE.toFixed(2)} ${t.jd}`,         icon: "🧾" },
+                  { label: t.paymentLabel, value: PAYMENT_METHODS.find(m => m.id === paymentInfo.method)?.[isRTL ? "labelAr" : "labelEn"] || "", icon: "💳" },
+                ].map((item, i, arr) => (
+                  <div key={i} style={{
+                    flex: 1, padding: "14px 16px",
+                    borderRight: i < arr.length - 1 ? `1px solid ${COLORS.border}` : "none",
+                    textAlign: "center",
+                  }}>
+                    <div style={{ fontSize: "1rem", marginBottom: 4 }}>{item.icon}</div>
+                    <div style={{ fontSize: "0.68rem", color: COLORS.textMuted, fontWeight: 600, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.5px" }}>{item.label}</div>
+                    <div style={{ fontSize: "0.88rem", fontWeight: 700, color: COLORS.textDark }}>{item.value}</div>
+                  </div>
+                ))}
               </div>
 
-              {/* Divider + Total + Button */}
-              <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
+              {/* Total + Button */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                  <span style={{ fontSize: "0.9rem", color: COLORS.textMuted, fontWeight: 600 }}>{t.total}</span>
-                  <span style={{ fontSize: "1.5rem", fontWeight: 800, color: COLORS.oliveDark }}>
-                    {(totalPrice + SHIPPING_FEE + TAX_FEE).toFixed(2)}
+                  <span style={{ fontSize: "0.88rem", color: COLORS.textMuted, fontWeight: 600 }}>{t.total}</span>
+                  <span style={{ fontSize: "1.8rem", fontWeight: 800, color: COLORS.oliveDark, lineHeight: 1 }}>
+                    {grandTotal.toFixed(2)}
                   </span>
-                  <span style={{ fontSize: "0.85rem", color: COLORS.oliveMid, fontWeight: 600 }}>{t.jd}</span>
+                  <span style={{ fontSize: "0.9rem", color: COLORS.oliveMid, fontWeight: 700 }}>{t.jd}</span>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                  <div style={{ fontSize: "0.72rem", color: "#7a5c2e", background: COLORS.goldLight, border: `1px solid ${COLORS.gold}44`, borderRadius: 8, padding: "8px 14px", lineHeight: 1.5 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: "0.72rem", color: "#7a5c2e", background: COLORS.goldLight, border: `1px solid ${COLORS.gold}44`, borderRadius: 8, padding: "7px 12px" }}>
                     🫒 {isRTL ? "معصور بالبرد · شحن خلال 48 ساعة" : "Cold-pressed · Ships within 48 hours"}
-                  </div>
+                  </span>
                   <button
                     onClick={handleCheckout}
                     disabled={isSubmitting}
                     style={{
-                      background: COLORS.oliveDark, color: "#fff",
-                      border: "none", borderRadius: 8, padding: "13px 40px",
+                      background: COLORS.oliveDark, color: "#fff", border: "none",
+                      borderRadius: 8, padding: "13px 44px",
                       fontSize: "0.95rem", fontWeight: 700,
                       cursor: isSubmitting ? "not-allowed" : "pointer",
                       opacity: isSubmitting ? 0.7 : 1,
@@ -536,10 +544,12 @@ export default function Cart() {
                   </button>
                 </div>
               </div>
+
             </div>
           </>
         )}
 
+        {/* Tracking */}
         <div style={{ marginTop: 48 }}>
           <TrackingSection t={t} isRTL={isRTL} trackingRef={trackingRef} highlightId={lastOrderId} />
         </div>
