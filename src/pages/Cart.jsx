@@ -151,7 +151,7 @@ function TrackingSection({ t, isRTL, trackingRef, highlightId }) {
     if (!window.confirm(t.cancelConfirm)) return;
     setCancelling(orderId);
     try {
-      await api.patch(`/orders/${orderId}`, { status: "cancelled" });
+      await api.put(`/orders/${orderId}/cancel`);
       fetchOrders();
     } catch {
       alert(t.cancelError);
