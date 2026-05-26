@@ -1,9 +1,9 @@
-// src/pages/Products.jsx
 import { useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LanguageContext } from "../languages/LanguageContext";
 import { useProducts, useFarms } from "../api/api";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 import Baraka from "../assets/Baraka.png";
 import GVF   from "../assets/GVF.png";
@@ -48,6 +48,7 @@ const TEXT = {
     jd:            "JD",
     addToCart:     "Add to Cart",
     added:         "✓ Added!",
+    loginToAdd:    "Sign in to Add",
     filterAll:     "All Farms",
     loading:       "Loading products...",
     noResults:     "No products found.",
@@ -62,6 +63,7 @@ const TEXT = {
     jd:            "دينار",
     addToCart:     "إضافة للسلة",
     added:         "✓ تمت الإضافة!",
+    loginToAdd:    "سجّل دخولك للإضافة",
     filterAll:     "كل المزارع",
     loading:       "جارٍ التحميل...",
     noResults:     "لا توجد منتجات.",
@@ -90,13 +92,15 @@ function badgeColor(badge) {
     "محدود":          { bg: "#1c2910",   color: "#c8a84b" },
     "Gift Size":      { bg: "#c8a84b22", color: "#7a5c2e" },
     "حجم الهدايا":    { bg: "#c8a84b22", color: "#7a5c2e" },
-    "حجم الهدايا":    { bg: "#c8a84b22", color: "#7a5c2e" },
   };
   return map[badge] || { bg: COLORS.border, color: COLORS.textDark };
 }
 
 function ProductCard({ prod, lang, t }) {
-  const { addToCart } = useCart();
+  const { addToCart }      = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate            = useNavigate();
+
   const versions      = prod.versions || [];
   const latestVersion = versions[versions.length - 1];
   const [selectedVersion, setSelectedVersion] = useState(latestVersion);
@@ -112,10 +116,23 @@ function ProductCard({ prod, lang, t }) {
     : { top: 10, left: 10 };
 
   function handleAdd() {
+  addToCart(prod, selectedVersion);
+  setJustAdded(true);
+  setTimeout(() => setJustAdded(false), 1400);
+}
     addToCart(prod, selectedVersion);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1400);
   }
+
+  const btnLabel = justAdded ? t.added : t.addToCart;
+
+
+  const btnBackground = !isAuthenticated
+    ? COLORS.textMuted
+    : justAdded
+      ? COLORS.oliveLight
+      : COLORS.oliveDark;
 
   return (
     <div
@@ -221,7 +238,7 @@ function ProductCard({ prod, lang, t }) {
           <button
             onClick={handleAdd}
             style={{
-              background: justAdded ? COLORS.oliveLight : COLORS.oliveDark,
+              background: btnBackground,
               color: "#fff",
               border: "none",
               padding: "9px 22px",
@@ -233,7 +250,7 @@ function ProductCard({ prod, lang, t }) {
               minWidth: 130,
             }}
           >
-            {justAdded ? t.added : t.addToCart}
+            {btnLabel}
           </button>
         </div>
 
