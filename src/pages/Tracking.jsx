@@ -263,7 +263,6 @@ function SplitCard({ product, lang }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "180px 1fr" }}>
 
-        {/* Left sidebar */}
         <div style={{ borderInlineEnd: `1px solid ${COLORS.border}`, background: COLORS.warmWhite }}>
           {STAGES.map((s, i) => {
             const isDone   = i < activeStage;

@@ -195,7 +195,6 @@ export default function Auth() {
     setRegTouched({});   setRegErr({});   setRegServer("");
   }
 
-  // ── Login validation ──
   function validateLogin(f = login) {
     const e = {};
     if (!f.email || !/\S+@\S+\.\S+/.test(f.email)) e.email    = t.emailError;
@@ -244,7 +243,7 @@ export default function Auth() {
     const e = {};
     if (!f.name.trim())                             e.name     = t.nameError;
     if (!f.email || !/\S+@\S+\.\S+/.test(f.email)) e.email    = t.emailError;
-    if (!f.password || f.password.length < 6)       e.password = t.passwordError;
+    if (!f.password || f.password.length < 5)       e.password = t.passwordError;
     if (f.confirm !== f.password)                   e.confirm  = t.confirmError;
     return e;
   }
