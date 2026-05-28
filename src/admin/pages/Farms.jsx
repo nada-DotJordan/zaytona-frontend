@@ -10,13 +10,19 @@ const EMPTY_FORM = {
 };
 
 export default function Farms({ farms, setFarms }) {
-  const [search, setSearch]     = useState("");
+  const [search, setSearch]       = useState("");
   const [govFilter, setGovFilter] = useState("");
   const [showForm, setShowForm]   = useState(false);
-  const [form, setForm]         = useState(EMPTY_FORM);
-  const [saving, setSaving]     = useState(false);
+  const [form, setForm]           = useState(EMPTY_FORM);
+  const [saving, setSaving]       = useState(false);
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  // ✅ Edit modal state
+  const [editingFarm, setEditingFarm] = useState(null); // holds the farm being edited
+  const [editForm, setEditForm]       = useState({});
+  const [editSaving, setEditSaving]   = useState(false);
+
+  const set     = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setEdit = (key) => (e) => setEditForm((f) => ({ ...f, [key]: e.target.value }));
 
   const filtered = farms.filter((f) => {
     const name  = f.nameEn || f.name || "";
@@ -36,13 +42,13 @@ export default function Farms({ farms, setFarms }) {
     }
     setSaving(true);
     try {
-      const res = await api.post('/farms', {
+      const res = await api.post("/farms", {
         nameEn:     form.farmname,
-        nameAr:     form.farmname,   
+        nameAr:     form.farmname,
         owner:      form.name,
         phone:      form.phone      || "—",
         email:      form.email      || "—",
-        nationalId: form.nationalId || "—", 
+        nationalId: form.nationalId || "—",
         gov:        form.gov        || "—",
         addr:       form.addr       || "—",
         gps:        form.gps        || "—",
@@ -73,28 +79,57 @@ export default function Farms({ farms, setFarms }) {
     }
   }
 
-  async function handleEdit(id) {
-    const farm = farms.find((x) => (x._id || x.id) === id);
-    if (!farm) return;
-    
-    const nname = window.prompt("Update Farm Name (EN):", farm.nameEn || farm.name);
-    if (nname === null) return; 
-    
-    const nphone = window.prompt("Update Owner Phone:", farm.phone || "");
-    const naddr  = window.prompt("Update Detailed Address:", farm.addr || "");
-    
+  // ✅ Open edit modal pre-filled with farm data
+  function openEdit(farm) {
+    setEditingFarm(farm);
+    setEditForm({
+      nameEn:     farm.nameEn || farm.name || "",
+      nameAr:     farm.nameAr || "",
+      owner:      farm.owner      || "",
+      phone:      farm.phone      || "",
+      email:      farm.email      || "",
+      nationalId: farm.nationalId || "",
+      gov:        farm.gov        || "",
+      addr:       farm.addr       || "",
+      gps:        farm.gps        || "",
+      size:       farm.size       || "",
+      trees:      farm.trees      || "",
+      method:     farm.method     || "Organic",
+      notes:      farm.notes      || "",
+    });
+  }
+
+  // ✅ Submit edit
+  async function handleEditSave() {
+    if (!editingFarm) return;
+    const id = editingFarm._id || editingFarm.id;
+    setEditSaving(true);
     try {
       const res = await api.put(`/farms/${id}`, {
-        nameEn: nname,
-        phone:  nphone ?? farm.phone,
-        addr:   naddr ?? farm.addr,
+        nameEn:     editForm.nameEn,
+        nameAr:     editForm.nameAr,
+        owner:      editForm.owner,
+        phone:      editForm.phone,
+        email:      editForm.email,
+        nationalId: editForm.nationalId,
+        gov:        editForm.gov,
+        addr:       editForm.addr,
+        gps:        editForm.gps,
+        size:       Number(editForm.size)  || 0,
+        trees:      Number(editForm.trees) || 0,
+        method:     editForm.method,
+        notes:      editForm.notes,
       });
+      // ✅ Merge updated data back into farms list
       setFarms((prev) =>
-        prev.map((x) => ((x._id || x.id) === id ? { ...x, ...res.data } : x))
+        prev.map((f) => (f._id || f.id) === id ? { ...f, ...res.data } : f)
       );
+      setEditingFarm(null);
     } catch (err) {
-      alert("Failed to update farm data.");
+      alert("Failed to update farm.");
       console.error(err);
+    } finally {
+      setEditSaving(false);
     }
   }
 
@@ -104,6 +139,7 @@ export default function Farms({ farms, setFarms }) {
     <div>
       <GoldLine />
 
+      {/* ── ADD FARM FORM ── */}
       <div className="za-card mb-3">
         <div className="za-card-header">
           <span className="za-card-title">
@@ -126,7 +162,6 @@ export default function Farms({ farms, setFarms }) {
                 <input className="za-input" value={form.farmname} onChange={set("farmname")} placeholder="e.g. Al Rawabi Farm" />
               </div>
             </div>
-
             <div className="row g-2 mb-2">
               <div className="col-md-4">
                 <label className="za-label">Phone</label>
@@ -141,7 +176,6 @@ export default function Farms({ farms, setFarms }) {
                 <input className="za-input" value={form.nationalId} onChange={set("nationalId")} placeholder="ID number" />
               </div>
             </div>
-
             <div className="row g-2 mb-2">
               <div className="col-md-4">
                 <label className="za-label">Governorate</label>
@@ -155,7 +189,6 @@ export default function Farms({ farms, setFarms }) {
                 <input className="za-input" value={form.addr} onChange={set("addr")} placeholder="Village / area / street" />
               </div>
             </div>
-
             <div className="row g-2 mb-2">
               <div className="col-md-4">
                 <label className="za-label">GPS coordinates</label>
@@ -170,7 +203,6 @@ export default function Farms({ farms, setFarms }) {
                 <input className="za-input" type="number" value={form.trees} onChange={set("trees")} placeholder="500" />
               </div>
             </div>
-
             <div className="row g-2 mb-3">
               <div className="col-md-4">
                 <label className="za-label">Farming method</label>
@@ -183,16 +215,9 @@ export default function Farms({ farms, setFarms }) {
               </div>
               <div className="col-md-8">
                 <label className="za-label">Notes</label>
-                <textarea
-                  className="za-input"
-                  value={form.notes}
-                  onChange={set("notes")}
-                  placeholder="Certifications, seasonal notes..."
-                  style={{ minHeight: 38 }}
-                />
+                <textarea className="za-input" value={form.notes} onChange={set("notes")} placeholder="Certifications, seasonal notes..." style={{ minHeight: 38 }} />
               </div>
             </div>
-
             <div className="d-flex gap-2">
               <button className="za-btn za-btn-primary" onClick={handleAdd} disabled={saving}>
                 <i className="bi bi-plus-lg" /> {saving ? "Saving..." : "Add farm"}
@@ -203,16 +228,12 @@ export default function Farms({ farms, setFarms }) {
         )}
       </div>
 
+      {/* ── SEARCH & FILTER ── */}
       <div className="row g-2 mb-3">
         <div className="col-md-8">
           <div className="za-search-wrap">
             <i className="bi bi-search" />
-            <input
-              className="za-input"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search farms by name or owner..."
-            />
+            <input className="za-input" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search farms by name or owner..." />
           </div>
         </div>
         <div className="col-md-4">
@@ -223,7 +244,7 @@ export default function Farms({ farms, setFarms }) {
         </div>
       </div>
 
-      {/* ── FARM CARDS GRID ── */}
+      {/* ── FARM CARDS ── */}
       <div className="row g-3">
         {filtered.map((f) => {
           const id     = f._id || f.id;
@@ -268,7 +289,7 @@ export default function Farms({ farms, setFarms }) {
                 )}
 
                 <div className="d-flex gap-2 pt-2" style={{ borderTop: `1px solid ${COLORS.border}` }}>
-                  <button className="za-btn za-btn-sm" onClick={() => handleEdit(id)}>
+                  <button className="za-btn za-btn-sm" onClick={() => openEdit(f)}>
                     <i className="bi bi-pencil" /> Edit
                   </button>
                   <button className="za-btn za-btn-sm za-btn-danger" onClick={() => handleDelete(id)}>
@@ -286,6 +307,126 @@ export default function Farms({ farms, setFarms }) {
           </div>
         )}
       </div>
+
+      {/* ✅ EDIT MODAL */}
+      {editingFarm && (
+        <div style={{
+          position: "fixed", inset: 0,
+          background: "rgba(0,0,0,0.45)",
+          zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 16,
+        }}
+          onClick={(e) => { if (e.target === e.currentTarget) setEditingFarm(null); }}
+        >
+          <div style={{
+            background: "#fff", borderRadius: 14,
+            width: "100%", maxWidth: 640,
+            maxHeight: "90vh", overflowY: "auto",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+          }}>
+            {/* Modal header */}
+            <div style={{
+              background: `linear-gradient(135deg, ${COLORS.oliveDark}, ${COLORS.oliveMid})`,
+              padding: "16px 20px",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              borderRadius: "14px 14px 0 0",
+            }}>
+              <span style={{ color: "#fff", fontWeight: 700, fontSize: "0.95rem" }}>
+                ✏️ Edit Farm — {editingFarm.nameEn || editingFarm.name}
+              </span>
+              <button onClick={() => setEditingFarm(null)} style={{ background: "none", border: "none", color: "#fff", fontSize: "1.2rem", cursor: "pointer", lineHeight: 1 }}>✕</button>
+            </div>
+
+            {/* Modal body */}
+            <div style={{ padding: 20 }}>
+              <div className="row g-2 mb-2">
+                <div className="col-md-6">
+                  <label className="za-label">Farm name (EN)</label>
+                  <input className="za-input" value={editForm.nameEn} onChange={setEdit("nameEn")} />
+                </div>
+                <div className="col-md-6">
+                  <label className="za-label">Farm name (AR)</label>
+                  <input className="za-input" value={editForm.nameAr} onChange={setEdit("nameAr")} dir="rtl" />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-2">
+                <div className="col-md-6">
+                  <label className="za-label">Owner full name</label>
+                  <input className="za-input" value={editForm.owner} onChange={setEdit("owner")} />
+                </div>
+                <div className="col-md-6">
+                  <label className="za-label">National ID</label>
+                  <input className="za-input" value={editForm.nationalId} onChange={setEdit("nationalId")} />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-2">
+                <div className="col-md-6">
+                  <label className="za-label">Phone</label>
+                  <input className="za-input" value={editForm.phone} onChange={setEdit("phone")} />
+                </div>
+                <div className="col-md-6">
+                  <label className="za-label">Email</label>
+                  <input className="za-input" type="email" value={editForm.email} onChange={setEdit("email")} />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-2">
+                <div className="col-md-4">
+                  <label className="za-label">Governorate</label>
+                  <select className="za-input" value={editForm.gov} onChange={setEdit("gov")}>
+                    <option value="">Select</option>
+                    {GOVERNORATES.map((g) => <option key={g}>{g}</option>)}
+                  </select>
+                </div>
+                <div className="col-md-8">
+                  <label className="za-label">Detailed address</label>
+                  <input className="za-input" value={editForm.addr} onChange={setEdit("addr")} />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-2">
+                <div className="col-md-4">
+                  <label className="za-label">GPS coordinates</label>
+                  <input className="za-input" value={editForm.gps} onChange={setEdit("gps")} placeholder="32.3254, 35.7418" />
+                </div>
+                <div className="col-md-4">
+                  <label className="za-label">Farm size (dunums)</label>
+                  <input className="za-input" type="number" value={editForm.size} onChange={setEdit("size")} />
+                </div>
+                <div className="col-md-4">
+                  <label className="za-label">Olive tree count</label>
+                  <input className="za-input" type="number" value={editForm.trees} onChange={setEdit("trees")} />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-3">
+                <div className="col-md-4">
+                  <label className="za-label">Farming method</label>
+                  <select className="za-input" value={editForm.method} onChange={setEdit("method")}>
+                    <option>Organic</option>
+                    <option>Traditional</option>
+                    <option>Mixed</option>
+                  </select>
+                </div>
+                <div className="col-md-8">
+                  <label className="za-label">Notes</label>
+                  <textarea className="za-input" value={editForm.notes} onChange={setEdit("notes")} style={{ minHeight: 38 }} />
+                </div>
+              </div>
+
+              <div className="d-flex gap-2 justify-content-end">
+                <button className="za-btn" onClick={() => setEditingFarm(null)}>Cancel</button>
+                <button className="za-btn za-btn-primary" onClick={handleEditSave} disabled={editSaving}>
+                  <i className="bi bi-check-lg" /> {editSaving ? "Saving..." : "Save changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
