@@ -1,4 +1,17 @@
-export const GOVERNORATES = ["Irbid", "Ajloun", "Jerash", "Balqa", "Amman", "Mafraq", "Karak", "Tafileh"];
+export const GOVERNORATES = [
+  "Amman",
+  "Irbid",
+  "Zarqa",
+  "Balqa",
+  "Mafraq",
+  "Jerash",
+  "Ajloun",
+  "Madaba",
+  "Karak",
+  "Tafileh",
+  "Ma'an",
+  "Aqaba",
+];
 
 export const dailyOrderData = [
   ["Friday", 17], ["Thursday", 22], ["Wednesday", 14], ["Tuesday", 19], ["Monday", 11], ["Sunday", 15], ["Saturday", 12]
@@ -38,13 +51,13 @@ export const navItems = [
 ];
 
 export const sectionTitles = {
-  dashboard: "Dashboard Overview",
-  analytics: "Data Analytics",
-  farms: "Farm Owners Management",
-  products: "Products Inventory",
-  orders: "Orders Ledger",
-  tracking: "Batch Tracking",
+  dashboard:     "Dashboard Overview",
+  analytics:     "Data Analytics",
+  farms:         "Farm Owners Management",
+  products:      "Products Inventory",
+  orders:        "Orders Ledger",
+  tracking:      "Batch Tracking",
   notifications: "System Notifications",
-  users: "Customer Registry",
-  reviews: "Customer Feedbacks & Reviews",
+  users:         "Customer Registry",
+  reviews:       "Customer Feedbacks & Reviews",
 };
