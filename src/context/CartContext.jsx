@@ -12,7 +12,6 @@ export function CartProvider({ children }) {
     }
   });
 
-  // Persist to localStorage on every change
   useEffect(() => {
     localStorage.setItem("zaytona_cart", JSON.stringify(items));
   }, [items]);
@@ -66,7 +65,6 @@ export function CartProvider({ children }) {
     localStorage.removeItem("zaytona_cart");
   }
 
-  // ✅ Call this from AuthContext logout() to avoid cart leaking between users
   function clearCartOnLogout() {
     setItems([]);
     localStorage.removeItem("zaytona_cart");
