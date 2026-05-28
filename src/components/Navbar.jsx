@@ -30,16 +30,16 @@ export default function Navbar() {
   const isLoggedIn           = !!user;
   const isRtl                = lang === "ar";
 
-  const [dropOpen, setDropOpen]         = useState(false);
-  const [unreadCount, setUnreadCount]   = useState(0);
-  const dropRef                         = useRef(null);
+  const [dropOpen, setDropOpen]       = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const dropRef                       = useRef(null);
 
   useEffect(() => {
     if (!isLoggedIn) return;
 
     async function fetchUnread() {
       try {
-        const res = await api.get("/notifications");
+        const res  = await api.get("/notifications");
         const data = Array.isArray(res.data) ? res.data : [];
         setUnreadCount(data.filter((n) => !n.isRead).length);
       } catch (err) {
@@ -48,7 +48,6 @@ export default function Navbar() {
     }
 
     fetchUnread();
-
     const interval = setInterval(fetchUnread, 60000);
     return () => clearInterval(interval);
   }, [isLoggedIn]);
@@ -89,6 +88,36 @@ export default function Navbar() {
     ? user.nameEn.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)
     : "?";
 
+  // ✅ Cart button — shared by both guests and logged-in users
+  const CartButton = (
+    <NavLink to="/cart" style={{ textDecoration: "none" }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 5,
+        border: `1.5px solid ${BTN_COLOR}`, borderRadius: 7,
+        padding: "6px 12px", color: BTN_COLOR,
+        fontWeight: 600, fontSize: "0.84rem",
+        cursor: "pointer", position: "relative", background: "none",
+      }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={BTN_COLOR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        {isRtl ? "السلة" : "Cart"}
+        {totalItems > 0 && (
+          <span style={{
+            position: "absolute", top: -7, right: -7,
+            background: COLORS.gold, color: "#fff",
+            fontSize: "0.58rem", fontWeight: 800,
+            width: 17, height: 17, borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            {totalItems > 99 ? "99+" : totalItems}
+          </span>
+        )}
+      </div>
+    </NavLink>
+  );
+
   return (
     <nav style={{
       backgroundColor: NAV_BG,
@@ -102,6 +131,7 @@ export default function Navbar() {
         direction: isRtl ? "rtl" : "ltr",
       }}>
 
+        {/* Logo */}
         <NavLink to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
             <circle cx="18" cy="18" r="18" fill="#3d5a27" />
@@ -113,6 +143,7 @@ export default function Navbar() {
           </span>
         </NavLink>
 
+        {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <NavLink to="/" end style={linkStyle}>{translations[lang].home}</NavLink>
           <NavLink to="/Products" style={linkStyle}>{isRtl ? "المنتجات" : "Products"}</NavLink>
@@ -121,11 +152,13 @@ export default function Navbar() {
           <NavLink to="/tracking" style={linkStyle}>{isRtl ? "رحلة الزيت" : "Oil Journey"}</NavLink>
         </div>
 
+        {/* Right side actions */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
 
           {isLoggedIn ? (
             <>
-               <button
+              {/* Notification bell */}
+              <button
                 onClick={handleNotifClick}
                 title={isRtl ? "الإشعارات" : "Notifications"}
                 style={{
@@ -146,68 +179,35 @@ export default function Navbar() {
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                   <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                 </svg>
-
                 {unreadCount > 0 && (
                   <span style={{
-                    position: "absolute",
-                    top: -5, right: -5,
-                    background: "#c0392b",
-                    color: "#fff",
-                    fontSize: "0.58rem",
-                    fontWeight: 800,
-                    minWidth: 17, height: 17,
-                    borderRadius: "50%",
+                    position: "absolute", top: -5, right: -5,
+                    background: "#c0392b", color: "#fff",
+                    fontSize: "0.58rem", fontWeight: 800,
+                    minWidth: 17, height: 17, borderRadius: "50%",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    padding: "0 3px",
-                    border: "2px solid #FFF8EC",
+                    padding: "0 3px", border: "2px solid #FFF8EC",
                   }}>
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
               </button>
 
-              <NavLink to="/cart" style={{ textDecoration: "none" }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 5,
-                  border: `1.5px solid ${BTN_COLOR}`, borderRadius: 7,
-                  padding: "6px 12px", color: BTN_COLOR,
-                  fontWeight: 600, fontSize: "0.84rem",
-                  cursor: "pointer", position: "relative", background: "none",
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={BTN_COLOR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                  </svg>
-                  {isRtl ? "السلة" : "Cart"}
-                  {totalItems > 0 && (
-                    <span style={{
-                      position: "absolute", top: -7, right: -7,
-                      background: COLORS.gold, color: "#fff",
-                      fontSize: "0.58rem", fontWeight: 800,
-                      width: 17, height: 17, borderRadius: "50%",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      {totalItems > 99 ? "99+" : totalItems}
-                    </span>
-                  )}
-                </div>
-              </NavLink>
+              {/* ✅ Cart — visible for logged-in users */}
+              {CartButton}
 
+              {/* User avatar dropdown */}
               <div ref={dropRef} style={{ position: "relative" }}>
                 <button
                   onClick={() => setDropOpen(o => !o)}
                   style={{
-                    width: 36, height: 36,
-                    borderRadius: "50%",
+                    width: 36, height: 36, borderRadius: "50%",
                     background: COLORS.oliveDark,
                     border: `2px solid ${dropOpen ? COLORS.gold : "transparent"}`,
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: "0.78rem",
+                    color: "#fff", fontWeight: 700, fontSize: "0.78rem",
                     cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "border-color 0.2s",
-                    flexShrink: 0,
+                    transition: "border-color 0.2s", flexShrink: 0,
                   }}
                 >
                   {initials}
@@ -227,28 +227,22 @@ export default function Navbar() {
                     overflow: "hidden",
                     zIndex: 200,
                   }}>
-
+                    {/* Header */}
                     <div style={{
                       background: `linear-gradient(135deg, ${COLORS.oliveDark}, ${COLORS.oliveMid})`,
-                      padding: "20px 16px 16px",
-                      textAlign: "center",
+                      padding: "20px 16px 16px", textAlign: "center",
                     }}>
                       <div style={{
                         width: 56, height: 56, borderRadius: "50%",
-                        background: COLORS.gold,
-                        color: "#fff", fontWeight: 700, fontSize: "1.3rem",
+                        background: COLORS.gold, color: "#fff",
+                        fontWeight: 700, fontSize: "1.3rem",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        margin: "0 auto 10px",
-                        border: "3px solid rgba(255,255,255,0.3)",
+                        margin: "0 auto 10px", border: "3px solid rgba(255,255,255,0.3)",
                       }}>
                         {initials}
                       </div>
-                      <p style={{ color: "#fff", fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>
-                        {user.nameEn}
-                      </p>
-                      <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem", margin: "2px 0 0" }}>
-                        {user.email}
-                      </p>
+                      <p style={{ color: "#fff", fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>{user.nameEn}</p>
+                      <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.72rem", margin: "2px 0 0" }}>{user.email}</p>
                       {user.role === "admin" && (
                         <span style={{
                           display: "inline-block", marginTop: 6,
@@ -263,56 +257,37 @@ export default function Navbar() {
                     </div>
 
                     <div style={{ padding: "8px 0" }}>
-
-                      <button
-                        onClick={() => { setDropOpen(false); handleNotifClick(); }}
-                        style={menuItemStyle}
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                          stroke={COLORS.textMuted} strokeWidth="2"
-                          strokeLinecap="round" strokeLinejoin="round">
+                      {/* Notifications */}
+                      <button onClick={() => { setDropOpen(false); handleNotifClick(); }} style={menuItemStyle}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={COLORS.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                         </svg>
                         <span>{isRtl ? "الإشعارات" : "Notifications"}</span>
                         {unreadCount > 0 && (
-                          <span style={{
-                            marginLeft: "auto",
-                            background: "#c0392b",
-                            color: "#fff", fontSize: "0.62rem", fontWeight: 700,
-                            padding: "1px 7px", borderRadius: 20,
-                          }}>
+                          <span style={{ marginLeft: "auto", background: "#c0392b", color: "#fff", fontSize: "0.62rem", fontWeight: 700, padding: "1px 7px", borderRadius: 20 }}>
                             {unreadCount}
                           </span>
                         )}
                       </button>
 
                       {/* Cart */}
-                      <button
-                        onClick={() => { setDropOpen(false); navigate("/cart"); }}
-                        style={menuItemStyle}
-                      >
+                      <button onClick={() => { setDropOpen(false); navigate("/cart"); }} style={menuItemStyle}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={COLORS.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                         </svg>
                         <span>{isRtl ? "السلة" : "My Cart"}</span>
                         {totalItems > 0 && (
-                          <span style={{
-                            marginLeft: "auto", background: COLORS.gold,
-                            color: "#fff", fontSize: "0.62rem", fontWeight: 700,
-                            padding: "1px 7px", borderRadius: 20,
-                          }}>
+                          <span style={{ marginLeft: "auto", background: COLORS.gold, color: "#fff", fontSize: "0.62rem", fontWeight: 700, padding: "1px 7px", borderRadius: 20 }}>
                             {totalItems}
                           </span>
                         )}
                       </button>
 
+                      {/* Admin panel */}
                       {user.role === "admin" && (
-                        <button
-                          onClick={() => { setDropOpen(false); navigate("/admin"); }}
-                          style={menuItemStyle}
-                        >
+                        <button onClick={() => { setDropOpen(false); navigate("/admin"); }} style={menuItemStyle}>
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={COLORS.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
                             <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
@@ -323,10 +298,8 @@ export default function Navbar() {
 
                       <div style={{ height: 1, background: COLORS.border, margin: "6px 0" }} />
 
-                      <button
-                        onClick={() => { toggleLang(); setDropOpen(false); }}
-                        style={menuItemStyle}
-                      >
+                      {/* Language toggle */}
+                      <button onClick={() => { toggleLang(); setDropOpen(false); }} style={menuItemStyle}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={COLORS.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10"/>
                           <line x1="2" y1="12" x2="22" y2="12"/>
@@ -335,10 +308,8 @@ export default function Navbar() {
                         <span>{isRtl ? "English" : "العربية"}</span>
                       </button>
 
-                      <button
-                        onClick={handleLogout}
-                        style={{ ...menuItemStyle, color: "#c0392b" }}
-                      >
+                      {/* Sign out */}
+                      <button onClick={handleLogout} style={{ ...menuItemStyle, color: "#c0392b" }}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c0392b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                           <polyline points="16 17 21 12 16 7"/>
@@ -346,7 +317,6 @@ export default function Navbar() {
                         </svg>
                         <span>{isRtl ? "تسجيل الخروج" : "Sign Out"}</span>
                       </button>
-
                     </div>
                   </div>
                 )}
@@ -354,6 +324,9 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              {/* ✅ Cart — visible for guests too */}
+              {CartButton}
+
               <button
                 onClick={() => navigate("/login")}
                 style={{
